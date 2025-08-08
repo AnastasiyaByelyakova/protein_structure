@@ -1,0 +1,4 @@
+# file: /home/user/protein-structure/src/model/model_training.py
+# hypothesis_version: 6.137.1
+
+[1e-06, 0.2, 0.5, 128, '--config_path', '..', 'Building model...', 'Epoch', 'Loss (MSE)', 'Training Loss', 'Validation Loss', 'X', '__main__', '_dir', 'attention_bias', 'attention_weight', 'base_dir', 'config', 'database', 'database.yaml', 'float32', 'glorot_uniform', 'linear', 'loss', 'mean_absolute_error', 'mean_squared_error', 'min', 'model', 'model.yaml', 'paths', 'paths.yaml', 'rb', 'relu', 'val_loss', 'y', 'zeros']

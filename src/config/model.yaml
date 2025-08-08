@@ -1,0 +1,16 @@
+model:
+  sequence_length: 512
+  feature_dim: 5 # Corrected to match the number of features from feature_engineering.py
+  coordinate_dim: 3
+  n_components: 5 # Corrected to match the number of features, as PCA can't create more components than features
+  learning_rate: 0.001
+  batch_size: 32
+  epochs: 50
+  dropout_rate: 0.2
+  patience: 10
+  min_delta: 0.0001
+  model_name: "protein_predictor"
+  model_version: "v1.0.0"
+  retrain_interval_days: 30
+  retrain_min_samples: 100
+  retrain_max_attempts: 3

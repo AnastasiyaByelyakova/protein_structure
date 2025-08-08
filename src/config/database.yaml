@@ -1,0 +1,9 @@
+# database.yaml
+# Database configuration for the Protein Structure Prediction Project
+database:
+  db_host: "aws-0-eu-north-1.pooler.supabase.com"
+  db_port: 5432
+  db_name: "postgres"
+  db_user: "postgres"
+  db_password: "31315werw45werwertgdhtry45746" # Note: This should ideally be an environment variable
+  database_url: "postgresql://postgres.cdwczcuykkklxobgmkdj:31315werw45werwertgdhtry45746@aws-0-eu-north-1.pooler.supabase.com:5432/postgres"
