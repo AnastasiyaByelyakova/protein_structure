@@ -5,3 +5,4 @@ __pycache__/
 .idx/
 src/data/
 .venv/
+scr/plots
