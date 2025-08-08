@@ -1,1 +1,4 @@
 .venv
+config
+models
+__pycache__
