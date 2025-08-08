@@ -1,4 +1,0 @@
-# file: /home/user/protein-structure/src/utils/config_loader.py
-# hypothesis_version: 6.137.1
-
-['\nDatabase Config:', '\nModel Config:', 'Paths Config:', '__main__', '_dir', 'base_dir', 'config', 'database', 'database.yaml', 'model', 'model.yaml', 'paths', 'paths.yaml', 'r']

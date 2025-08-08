@@ -1,4 +1,0 @@
-# file: /home/user/protein-structure/src/data_handling/ncbi_processor.py
-# hypothesis_version: 6.137.1
-
-[1.0, 10000, ',', '..//GBXref_id', './/GBQualifier', './/GBSeq', './/GBSeq_definition', './/GBSeq_length', './/GBSeq_organism', './/GBSeq_sequence', './/GBXref_dbname', './/Id', '1A0O', '1AKE', '1BCC', '1CRN', '1UBQ', ':', 'GBQualifier_name', 'GBQualifier_value', 'PDB', 'UniProtKB/Swiss-Prot', '__main__', 'credentials', 'db', 'email', 'gene', 'id', 'ncbi_email', 'protein', 'retmax', 'retmode', 'term', 'tool', 'usehistory', 'xml', 'y']
