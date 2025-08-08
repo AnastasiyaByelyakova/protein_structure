@@ -1,6 +1,7 @@
-config/
-models/
+src/config/
+src/models/
 __pycache__/
 .hypothesis/
 .idx/
-data/
+src/data/
+.venv/
