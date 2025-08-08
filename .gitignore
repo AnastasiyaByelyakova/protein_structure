@@ -1,4 +1,6 @@
-.venv
-config
-models
-__pycache__
+config/
+models/
+__pycache__/
+.hypothesis/
+.idx/
+data/
