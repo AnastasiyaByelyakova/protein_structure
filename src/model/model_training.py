@@ -145,7 +145,7 @@ def train_model(config: Any, data_path: Path, model_dir: Path) -> Model:
     # Define callbacks
     early_stopping = EarlyStopping(monitor='val_loss', patience=config.patience, min_delta=config.min_delta, verbose=1)
     model_checkpoint = ModelCheckpoint(
-        filepath=model_dir / f"{config.model_name}_{config.model_version}.h5",
+        filepath=os.path.join(model_dir, f"{config.model_name}_{config.model_version}.h5"),
         save_best_only=True,
         monitor='val_loss',
         mode='min',
@@ -171,7 +171,7 @@ def train_model(config: Any, data_path: Path, model_dir: Path) -> Model:
     plt.ylabel('Loss (MSE)')
     plt.legend()
     plt.grid(True)
-    plt.savefig(model_dir / f"{config.model_name}_{config.model_version}_training_history.png")
+    plt.savefig(os.path.join(model_dir, f"{config.model_name}_{config.model_version}_training_history.png"))
     plt.show()
 
     logger.info("Model training completed.")

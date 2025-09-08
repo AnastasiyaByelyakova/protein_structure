@@ -26,7 +26,7 @@ from sklearn.model_selection import train_test_split
 import yaml
 
 # Import the entire model_training module to ensure custom layers are in scope
-from model_training import *
+from .model_training import *
 from utils.config_loader import load_config, ModelConfig, PathsConfig
 
 # Set up logging
@@ -68,7 +68,7 @@ class ModelEvaluator:
 
     def _load_model(self):
         """Loads the saved Keras model."""
-        if not self.model_path.exists():
+        if not os.path.exists(self.model_path):
             raise FileNotFoundError(f"Model file not found at {self.model_path}")
 
         # Need to pass the custom layers to the load_model function

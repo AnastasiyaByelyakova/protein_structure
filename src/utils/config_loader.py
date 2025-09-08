@@ -61,10 +61,7 @@ class DatabaseConfig:
     db_name: str
     db_user: str
     db_password: str
-    database_url: str = field(init=False)
-
-    def __post_init__(self):
-        self.database_url = f"postgresql+psycopg2://{self.db_user}:{self.db_password}@{self.db_host}:{self.db_port}/{self.db_name}"
+    database_url: str
 
 @dataclass
 class ModelConfig:

@@ -10,8 +10,8 @@ from contextlib import contextmanager
 from sqlalchemy import create_engine, text # Import 'text' for raw SQL execution
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.ext.declarative import declarative_base # Import this to ensure Base is available for type hinting
-from .db_models import * # Import all models, including Protein
-from data_handling.pdb_processor import PDBProcessor # Needed for three_to_one_letter_aa mapping in get_training_dataset
+from .db_models import *
+# from data_handling.pdb_processor import PDBProcessor # Needed for three_to_one_letter_aa mapping in get_training_dataset
 from sqlalchemy import or_ # For OR conditions in search queries
 from dataclasses import is_dataclass, asdict
 
@@ -20,6 +20,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 logger = logging.getLogger(__name__)
 
 class DatabaseManager:
+
     def __init__(self, db_url: Optional[str] = None):
         """
         Initialize database manager
@@ -176,14 +177,32 @@ class DatabaseManager:
             )
         return search_query
 
+    def create_user(self, email: str, hashed_password: str):
+            """
+            Creates a new user in the database.
+            """
+            with self.get_session() as session:
+                db_user = User(email=email, hashed_password=hashed_password)
+                session.add(db_user)
+                session.commit()
+                session.refresh(db_user)
+                return db_user
+
+    def get_user_by_username(self, session, username: str) -> Optional[User]:
+        """
+        Retrieves a user from the database by username.
+        """
+        return session.query(User).filter(User.email == username).first()
+
 if __name__ == "__main__":
     # Example usage for standalone script
     db_manager = DatabaseManager(
-        db_url="postgresql+psycopg2://postgres:3141@localhost:5432/protein_structures"
+        db_url="postgresql://neondb_owner:npg_v7N8UpXlYFun@ep-sweet-band-adaqfu6r-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
     )
 
     # Note: create_tables is typically called by main_pipeline.py
     # For standalone testing, you'd need to import Base from db_models.
+    stats = db_manager.create_tables(Base)
 
     # Get database statistics
     stats = db_manager.get_database_stats()

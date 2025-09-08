@@ -17,11 +17,7 @@ import logging
 from typing import List, Dict, Any, Optional
 from dataclasses import asdict  # Import asdict for serializing dataclasses
 from tqdm import tqdm
-# Import all configurations from the main config.py file
-# Correct the import for load_config, assuming it's in utils/config_loader.py
-# This fixes the ImportError you were seeing.
 from utils.config_loader import load_config
-# Import the refactored PDBProcessor and existing NCBIProcessor
 from pdb_processor import PDBProcessor
 from ncbi_processor import NCBIProcessor
 from database_handling.database_manager import DatabaseManager  # Assuming DatabaseManager is still separate
@@ -55,31 +51,6 @@ try:
     DATABASE_URL = paths_config['database']['database_url']
 except FileNotFoundError:
     logger.error("Could not find ncbi_email.yaml. Using default path 'data/pdb'.")
-# A small list of example PDB IDs to demonstrate the pipeline.
-
-# A small list of example PDB IDs to demonstrate the pipeline.
-EXAMPLE_PDB_IDS = ["1CRN",
-                   "4HHB",
-                   "2GB1",
-                   "1UBQ",
-                   '1A22',
-                   '1AKJ',
-                   '1B44',
-                   '1D66',
-                   '1HKE',
-                   '1HKE',
-                   '1MBD',
-                   '1R69',
-                   '1ZDD',
-                   '2OOB',
-                   '2P4D',
-                   '3K0N',
-                   '3MQI',
-                   '3S8P',
-                   '4B2B',
-                   '4HHC',
-                   '4Z0N',
-                   '5C69']
 
 class MainPipeline:
 
@@ -203,6 +174,44 @@ def main(PDB_DOWNLOAD_DIR):
     """Main function to run the pipeline."""
     pipeline = MainPipeline(PDB_DOWNLOAD_DIR=PDB_DOWNLOAD_DIR)
     pipeline.run()
+
+def get_all_pdb_ids():
+    """
+    Get list of all current PDB IDs by parsing pdb_seqres.txt.
+
+    Returns:
+        List of PDB IDs
+    """
+
+    pdb_all_ids_url = "https://files.wwpdb.org/pub/pdb/derived_data/pdb_seqres.txt"
+
+    print(f"Fetching list of all PDB IDs from {pdb_all_ids_url}...")
+    pdb_ids = set() # Use a set to store unique PDB IDs
+    try:
+        response = requests.get(pdb_all_ids_url, stream=True, timeout=60)
+        response.raise_for_status() # Raise an HTTPError for bad responses (4xx or 5xx)
+
+        # Read the file line by line to avoid loading large file into memory
+        for line in response.iter_lines(decode_unicode=True):
+            if line.startswith('>'):
+                # Example line: >1ABC_1 mol:protein length:100 1ABC_A
+                # We want the 4-character PDB ID, which is typically at the start of the line after '>'
+                match = re.match(r'^>(\w{4})_', line)
+                if match:
+                    pdb_ids.add(match.group(1).upper()) # Add unique PDB ID
+
+        all_ids_list = sorted(list(pdb_ids)) # Convert to list and sort
+        print(f"Found {len(all_ids_list)} unique PDB IDs from pdb_seqres.txt.")
+        return all_ids_list
+    except requests.exceptions.RequestException as e:
+        logger.error(f"Failed to download pdb_seqres.txt from {self.pdb_all_ids_url}: {e}")
+        return []
+    except Exception as e:
+        logger.error(f"An unexpected error occurred while parsing pdb_seqres.txt: {e}")
+        return []
+
+# A small list of example PDB IDs to demonstrate the pipeline.
+EXAMPLE_PDB_IDS = get_all_pdb_ids()[1467:]
 
 if __name__ == "__main__":
     main(PDB_DOWNLOAD_DIR)
