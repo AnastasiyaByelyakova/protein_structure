@@ -11,7 +11,6 @@
         <h1>Protein Predictor Interface</h1>
         <nav>
             <ul>
-                <li><a href="#auth">Login/Register</a></li>
                 <li><a href="#prediction">Prediction</a></li>
                 <li><a href="#model-info">Model Info</a></li>
                 <li><a href="#validation">Validation</a></li>
@@ -21,39 +20,7 @@
     </header>
 
     <main>
-        <section id="auth">
-            <h2>Login or Register</h2>
-            <div id="auth-content">
-                <h3>Login</h3>
-                <form id="login-form">
-                    <div>
-                        <label for="login-email">Email:</label>
-                        <input type="email" id="login-email" required>
-                    </div>
-                    <div>
-                        <label for="login-password">Password:</label>
-                        <input type="password" id="login-password" required>
-                    </div>
-                    <button type="submit">Login</button>
-                </form>
-
-                <h3>Register</h3>
-                <form id="register-form">
-                     <div>
-                        <label for="register-email">Email:</label>
-                        <input type="email" id="register-email" required>
-                    </div>
-                    <div>
-                        <label for="register-password">Password:</label>
-                        <input type="password" id="register-password" required>
-                    </div>
-                    <button type="submit">Register</button>
-                </form>
-                <div id="auth-result"></div>
-            </div>
-        </section>
-
-        <section id="prediction" class="hidden">
+        <section id="prediction">
             <h2>Predict Protein Function</h2>
             <div id="prediction-content">
                 <h3>Predict from Sequence</h3>
@@ -77,14 +44,14 @@
             </div>
         </section>
 
-        <section id="model-info" class="hidden">
+        <section id="model-info">
             <h2>Model Information</h2>
             <div id="model-info-content">
                 <p>Loading model information...</p>
             </div>
         </section>
 
-        <section id="validation" class="hidden">
+        <section id="validation">
             <h2>Model Validation</h2>
             <div id="validation-content">
                 <p>Loading validation results...</p>
@@ -96,7 +63,7 @@
             </div>
         </section>
 
-        <section id="retraining" class="hidden">
+        <section id="retraining">
             <h2>Model Retraining</h2>
             <div id="retraining-content">
                 <p>Options for retraining the model.</p>

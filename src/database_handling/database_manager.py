@@ -78,7 +78,6 @@ class DatabaseManager:
         with self.get_session() as session:
             proteins = session.query(Protein).all()
             proteins =  [i.to_dict() for i in proteins]
-            print(proteins[0].keys())
             return proteins
 
     def get_database_stats(self) -> Dict[str, int]:
@@ -176,23 +175,6 @@ class DatabaseManager:
                 .all()
             )
         return search_query
-
-    def create_user(self, email: str, hashed_password: str):
-            """
-            Creates a new user in the database.
-            """
-            with self.get_session() as session:
-                db_user = User(email=email, hashed_password=hashed_password)
-                session.add(db_user)
-                session.commit()
-                session.refresh(db_user)
-                return db_user
-
-    def get_user_by_username(self, session, username: str) -> Optional[User]:
-        """
-        Retrieves a user from the database by username.
-        """
-        return session.query(User).filter(User.email == username).first()
 
 if __name__ == "__main__":
     # Example usage for standalone script
