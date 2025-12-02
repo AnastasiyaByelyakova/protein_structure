@@ -95,7 +95,7 @@ class FeatureEngineer:
         """
         self.config = config
         self.scaler = StandardScaler()
-        self.pca_model = None
+        self.pca_model = PCA(n_components=20)
         self.feature_names = []
 
     def extract_features(self, protein_data: Dict) -> Tuple[np.ndarray, np.ndarray, str]:

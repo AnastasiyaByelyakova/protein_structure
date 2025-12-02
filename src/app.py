@@ -185,11 +185,13 @@ async def predict_protein(sequence: str = Form(None), fasta_file: UploadFile = F
     try:
         # Simplified feature extraction for a single sequence
         features = feature_engineer._sequence_to_features(sequences_to_predict['input_sequence'])
+        print(features)
+        print(feature_engineer)
         padded = feature_engineer._pad_or_truncate(features, model_config.sequence_length, features.shape[1])
         normalized = feature_engineer.normalize_features(padded, fit=False)
+        print(feature_engineer.pca_model)
         reduced = feature_engineer.pca_model.transform(normalized)
         X_predict = np.expand_dims(reduced, axis=0)
-
         prediction = model.predict(X_predict)
         return JSONResponse(content={"predictions": prediction.tolist()})
     except Exception as e:
