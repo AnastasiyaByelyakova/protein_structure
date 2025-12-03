@@ -1,0 +1,245 @@
+HEADER    ACETYLCHOLINE RECEPTOR                  09-MAR-99   1CEK              
+TITLE     THREE-DIMENSIONAL STRUCTURE OF THE MEMBRANE-EMBEDDED M2 CHANNEL-LINING
+TITLE    2 SEGMENT FROM THE NICOTINIC ACETYLCHOLINE RECEPTOR BY SOLID-STATE NMR 
+TITLE    3 SPECTROSCOPY                                                         
+COMPND    MOL_ID: 1;                                                            
+COMPND   2 MOLECULE: PROTEIN (ACETYLCHOLINE RECEPTOR M2);                       
+COMPND   3 CHAIN: A;                                                            
+COMPND   4 FRAGMENT: M2 DOMAIN;                                                 
+COMPND   5 SYNONYM: ACHR M2;                                                    
+COMPND   6 ENGINEERED: YES                                                      
+SOURCE    MOL_ID: 1;                                                            
+SOURCE   2 ORGANISM_SCIENTIFIC: RATTUS NORVEGICUS;                              
+SOURCE   3 ORGANISM_COMMON: NORWAY RAT;                                         
+SOURCE   4 ORGANISM_TAXID: 10116;                                               
+SOURCE   5 ORGAN: BRAIN;                                                        
+SOURCE   6 CELL: NEURON;                                                        
+SOURCE   7 CELLULAR_LOCATION: POST-SYNAPTIC MEMBRANE;                           
+SOURCE   8 EXPRESSION_SYSTEM: ESCHERICHIA COLI BL21;                            
+SOURCE   9 EXPRESSION_SYSTEM_TAXID: 511693;                                     
+SOURCE  10 EXPRESSION_SYSTEM_STRAIN: BL21;                                      
+SOURCE  11 EXPRESSION_SYSTEM_VECTOR_TYPE: BACTERIAL;                            
+SOURCE  12 EXPRESSION_SYSTEM_PLASMID: PGEX FUSION                               
+KEYWDS    ACETYLCHOLINE RECEPTOR, M2, LIPID BILAYERS, ION-CHANNEL               
+EXPDTA    SOLID-STATE NMR                                                       
+AUTHOR    F.M.MARASSI,J.J.GESELL,Y.KIM,A.P.VALENTE,M.OBLATT-MONTAL,M.MONTAL,    
+AUTHOR   2 S.J.OPELLA                                                           
+REVDAT   5   27-DEC-23 1CEK    1       REMARK                                   
+REVDAT   4   16-FEB-22 1CEK    1       REMARK SEQADV                            
+REVDAT   3   24-FEB-09 1CEK    1       VERSN                                    
+REVDAT   2   09-APR-99 1CEK    1       JRNL                                     
+REVDAT   1   11-MAR-99 1CEK    0                                                
+JRNL        AUTH   S.J.OPELLA,F.M.MARASSI,J.J.GESELL,A.P.VALENTE,Y.KIM,         
+JRNL        AUTH 2 M.OBLATT-MONTAL,M.MONTAL                                     
+JRNL        TITL   STRUCTURES OF THE M2 CHANNEL-LINING SEGMENTS FROM NICOTINIC  
+JRNL        TITL 2 ACETYLCHOLINE AND NMDA RECEPTORS BY NMR SPECTROSCOPY.        
+JRNL        REF    NAT.STRUCT.BIOL.              V.   6   374 1999              
+JRNL        REFN                   ISSN 1072-8368                               
+JRNL        PMID   10201407                                                     
+JRNL        DOI    10.1038/7610                                                 
+REMARK   1                                                                      
+REMARK   1 REFERENCE 1                                                          
+REMARK   1  AUTH   F.M.MARASSI,J.J.GESELL,A.P.VALENTE,Y.KIM,M.OBLATT-MONTAL,    
+REMARK   1  AUTH 2 M.MONTAL,S.J.OPELLA                                          
+REMARK   1  TITL   DILUTE SPIN-EXCHANGE ASSIGNMENT OF SOLID-STATE NMR SPECTRA   
+REMARK   1  TITL 2 OF ORIENTED PROTEINS: ACETYLCHOLINE RECEPTOR M2 PEPTIDE IN   
+REMARK   1  TITL 3 BILAYERS                                                     
+REMARK   1  REF    TO BE PUBLISHED                                              
+REMARK   1  REFN                                                                
+REMARK   2                                                                      
+REMARK   2 RESOLUTION. NOT APPLICABLE.                                          
+REMARK   3                                                                      
+REMARK   3 REFINEMENT.                                                          
+REMARK   3   PROGRAM     : FISI, RESTRICT                                       
+REMARK   3   AUTHORS     : NULL                                                 
+REMARK   3                                                                      
+REMARK   3  OTHER REFINEMENT REMARKS: NULL                                      
+REMARK   4                                                                      
+REMARK   4 1CEK COMPLIES WITH FORMAT V. 3.30, 13-JUL-11                         
+REMARK 100                                                                      
+REMARK 100 THIS ENTRY HAS BEEN PROCESSED BY RCSB.                               
+REMARK 100 THE DEPOSITION ID IS D_1000000606.                                   
+REMARK 210                                                                      
+REMARK 210 EXPERIMENTAL DETAILS                                                 
+REMARK 210  EXPERIMENT TYPE                : NMR                                
+REMARK 210  TEMPERATURE           (KELVIN) : 295                                
+REMARK 210  PH                             : 6.0                                
+REMARK 210  IONIC STRENGTH                 : NULL                               
+REMARK 210  PRESSURE                       : NULL                               
+REMARK 210  SAMPLE CONTENTS                : DMPC                               
+REMARK 210                                                                      
+REMARK 210  NMR EXPERIMENTS CONDUCTED      : 15N SHIFT/1H-15N DIPOLAR           
+REMARK 210                                   COUPLING PISEMA; 15N SHIFT/15N     
+REMARK 210                                   SHIFT HETCOR; 1H SHIFT/15N SHIFT/  
+REMARK 210                                   1H-15N DIPOLAR COUPLING            
+REMARK 210                                   CORRELATION                        
+REMARK 210  SPECTROMETER FIELD STRENGTH    : 400 MHZ; 550 MHZ                   
+REMARK 210  SPECTROMETER MODEL             : HOMEBUILT; CMX400                  
+REMARK 210  SPECTROMETER MANUFACTURER      : HOME-BUILT; CHEMAGNETICS           
+REMARK 210                                                                      
+REMARK 210  STRUCTURE DETERMINATION.                                            
+REMARK 210   SOFTWARE USED                 : BACKTOR, RESTRICT                  
+REMARK 210   METHOD USED                   : ORIENTATIONAL CONSTRAINTS          
+REMARK 210                                                                      
+REMARK 210 CONFORMERS, NUMBER CALCULATED   : 24                                 
+REMARK 210 CONFORMERS, NUMBER SUBMITTED    : 1                                  
+REMARK 210 CONFORMERS, SELECTION CRITERIA  : LOWEST ENERGY                      
+REMARK 210                                                                      
+REMARK 210 BEST REPRESENTATIVE CONFORMER IN THIS ENSEMBLE : NULL                
+REMARK 210                                                                      
+REMARK 210 REMARK: LOWEST ENERGY. SAMPLE: DMPC BILAYERS ORIENTED ON GLASS       
+REMARK 210  SLIDES 15N CHEMICAL SHIFT, 1H CHEMICAL SHIFT AND 1H-15N DIPOLAR     
+REMARK 210  COUPLING FREQUENCIES WERE MEASURED FROM PISEMA AND                  
+REMARK 217                                                                      
+REMARK 217 SOLID STATE NMR STUDY                                                
+REMARK 217 THE COORDINATES IN THIS ENTRY WERE GENERATED FROM SOLID              
+REMARK 217 STATE NMR DATA. PROTEIN DATA BANK CONVENTIONS REQUIRE THAT           
+REMARK 217 CRYST1 AND SCALE RECORDS BE INCLUDED, BUT THE VALUES ON              
+REMARK 217 THESE RECORDS ARE MEANINGLESS.                                       
+REMARK 300                                                                      
+REMARK 300 BIOMOLECULE: 1                                                       
+REMARK 300 SEE REMARK 350 FOR THE AUTHOR PROVIDED AND/OR PROGRAM                
+REMARK 300 GENERATED ASSEMBLY INFORMATION FOR THE STRUCTURE IN                  
+REMARK 300 THIS ENTRY. THE REMARK MAY ALSO PROVIDE INFORMATION ON               
+REMARK 300 BURIED SURFACE AREA.                                                 
+REMARK 350                                                                      
+REMARK 350 COORDINATES FOR A COMPLETE MULTIMER REPRESENTING THE KNOWN           
+REMARK 350 BIOLOGICALLY SIGNIFICANT OLIGOMERIZATION STATE OF THE                
+REMARK 350 MOLECULE CAN BE GENERATED BY APPLYING BIOMT TRANSFORMATIONS          
+REMARK 350 GIVEN BELOW.  BOTH NON-CRYSTALLOGRAPHIC AND                          
+REMARK 350 CRYSTALLOGRAPHIC OPERATIONS ARE GIVEN.                               
+REMARK 350                                                                      
+REMARK 350 BIOMOLECULE: 1                                                       
+REMARK 350 AUTHOR DETERMINED BIOLOGICAL UNIT: MONOMERIC                         
+REMARK 350 APPLY THE FOLLOWING TO CHAINS: A                                     
+REMARK 350   BIOMT1   1  1.000000  0.000000  0.000000        0.00000            
+REMARK 350   BIOMT2   1  0.000000  1.000000  0.000000        0.00000            
+REMARK 350   BIOMT3   1  0.000000  0.000000  1.000000        0.00000            
+REMARK 465                                                                      
+REMARK 465 MISSING RESIDUES                                                     
+REMARK 465 THE FOLLOWING RESIDUES WERE NOT LOCATED IN THE                       
+REMARK 465 EXPERIMENT. (RES=RESIDUE NAME; C=CHAIN IDENTIFIER;                   
+REMARK 465 SSSEQ=SEQUENCE NUMBER; I=INSERTION CODE.)                            
+REMARK 465     RES C SSSEQI                                                     
+REMARK 465     GLY A     1                                                      
+REMARK 465     SER A     2                                                      
+REMARK 465     GLU A     3                                                      
+REMARK 465     LYS A     4                                                      
+REMARK 465     MET A     5                                                      
+REMARK 465     SER A     6                                                      
+REMARK 465     THR A    22                                                      
+REMARK 465     SER A    23                                                      
+REMARK 465     GLN A    24                                                      
+REMARK 465     ARG A    25                                                      
+REMARK 470                                                                      
+REMARK 470 MISSING ATOM                                                         
+REMARK 470 THE FOLLOWING RESIDUES HAVE MISSING ATOMS (RES=RESIDUE NAME;         
+REMARK 470 C=CHAIN IDENTIFIER; SSEQ=SEQUENCE NUMBER; I=INSERTION CODE):         
+REMARK 470     RES CSSEQI  ATOMS                                                
+REMARK 470     THR A   7    N    CB   OG1  CG2                                  
+REMARK 470     ALA A   8    CB                                                  
+REMARK 470     ILE A   9    CB   CG1  CG2  CD1                                  
+REMARK 470     SER A  10    CB   OG                                             
+REMARK 470     VAL A  11    CB   CG1  CG2                                       
+REMARK 470     LEU A  12    CB   CG   CD1  CD2                                  
+REMARK 470     LEU A  13    CB   CG   CD1  CD2                                  
+REMARK 470     ALA A  14    CB                                                  
+REMARK 470     GLN A  15    CB   CG   CD   OE1  NE2                             
+REMARK 470     ALA A  16    CB                                                  
+REMARK 470     VAL A  17    CB   CG1  CG2                                       
+REMARK 470     PHE A  18    CB   CG   CD1  CD2  CE1  CE2  CZ                    
+REMARK 470     LEU A  19    CB   CG   CD1  CD2                                  
+REMARK 470     LEU A  20    CB   CG   CD1  CD2                                  
+REMARK 470     LEU A  21    C    O    CB   CG   CD1  CD2                        
+DBREF  1CEK A    1    25  UNP    P25110   ACHD_RAT       274    298             
+SEQADV 1CEK GLY A    1  UNP  P25110    CYS   274 CLONING ARTIFACT               
+SEQADV 1CEK SER A    2  UNP  P25110    GLY   275 CLONING ARTIFACT               
+SEQADV 1CEK MET A    5  UNP  P25110    THR   278 CONFLICT                       
+SEQADV 1CEK THR A    7  UNP  P25110    VAL   280 CONFLICT                       
+SEQADV 1CEK ALA A   16  UNP  P25110    SER   289 CONFLICT                       
+SEQADV 1CEK THR A   22  UNP  P25110    ILE   295 CONFLICT                       
+SEQADV 1CEK GLN A   24  UNP  P25110    LYS   297 CONFLICT                       
+SEQRES   1 A   25  GLY SER GLU LYS MET SER THR ALA ILE SER VAL LEU LEU          
+SEQRES   2 A   25  ALA GLN ALA VAL PHE LEU LEU LEU THR SER GLN ARG              
+HELIX    1   1 THR A    7  LEU A   21  1SEE REMARK 650                    15    
+CRYST1    1.000    1.000    1.000  90.00  90.00  90.00 P 1           1          
+ORIGX1      1.000000  0.000000  0.000000        0.00000                         
+ORIGX2      0.000000  1.000000  0.000000        0.00000                         
+ORIGX3      0.000000  0.000000  1.000000        0.00000                         
+SCALE1      1.000000  0.000000  0.000000        0.00000                         
+SCALE2      0.000000  1.000000  0.000000        0.00000                         
+SCALE3      0.000000  0.000000  1.000000        0.00000                         
+ATOM      1  CA  THR A   7      -0.360   0.941  -2.200  1.00  0.00           C  
+ATOM      2  C   THR A   7       0.085  -0.223  -1.315  1.00  0.00           C  
+ATOM      3  O   THR A   7       0.492  -1.284  -1.812  1.00  0.00           O  
+ATOM      4  N   ALA A   8       0.000   0.000   0.000  1.00  0.00           N  
+ATOM      5  CA  ALA A   8       0.389  -1.016   0.957  1.00  0.00           C  
+ATOM      6  C   ALA A   8      -0.592  -2.186   0.907  1.00  0.00           C  
+ATOM      7  O   ALA A   8      -0.344  -3.253   1.487  1.00  0.00           O  
+ATOM      8  H   ALA A   8      -0.339   0.884   0.375  1.00  0.00           H  
+ATOM      9  N   ILE A   9      -1.707  -1.957   0.203  1.00  0.00           N  
+ATOM     10  CA  ILE A   9      -2.726  -2.977   0.071  1.00  0.00           C  
+ATOM     11  C   ILE A   9      -2.500  -3.779  -1.209  1.00  0.00           C  
+ATOM     12  O   ILE A   9      -2.971  -4.917  -1.341  1.00  0.00           O  
+ATOM     13  H   ILE A   9      -1.880  -1.066  -0.261  1.00  0.00           H  
+ATOM     14  N   SER A  10      -1.769  -3.159  -2.142  1.00  0.00           N  
+ATOM     15  CA  SER A  10      -1.475  -3.800  -3.407  1.00  0.00           C  
+ATOM     16  C   SER A  10      -0.471  -4.934  -3.196  1.00  0.00           C  
+ATOM     17  O   SER A  10      -0.521  -5.966  -3.880  1.00  0.00           O  
+ATOM     18  H   SER A  10      -1.396  -2.221  -2.002  1.00  0.00           H  
+ATOM     19  N   VAL A  11       0.436  -4.717  -2.238  1.00  0.00           N  
+ATOM     20  CA  VAL A  11       1.449  -5.706  -1.930  1.00  0.00           C  
+ATOM     21  C   VAL A  11       0.792  -6.983  -1.406  1.00  0.00           C  
+ATOM     22  O   VAL A  11       1.234  -8.097  -1.708  1.00  0.00           O  
+ATOM     23  H   VAL A  11       0.448  -3.855  -1.694  1.00  0.00           H  
+ATOM     24  N   LEU A  12      -0.268  -6.793  -0.617  1.00  0.00           N  
+ATOM     25  CA  LEU A  12      -0.988  -7.915  -0.048  1.00  0.00           C  
+ATOM     26  C   LEU A  12      -1.426  -8.871  -1.157  1.00  0.00           C  
+ATOM     27  O   LEU A  12      -1.260 -10.040  -1.075  1.00  0.00           O  
+ATOM     28  H   LEU A  12      -0.065  -5.862  -0.388  1.00  0.00           H  
+ATOM     29  N   LEU A  13      -1.985  -8.345  -2.190  1.00  0.00           N  
+ATOM     30  CA  LEU A  13      -2.448  -9.137  -3.314  1.00  0.00           C  
+ATOM     31  C   LEU A  13      -1.289  -9.948  -3.894  1.00  0.00           C  
+ATOM     32  O   LEU A  13      -1.480 -11.064  -4.398  1.00  0.00           O  
+ATOM     33  H   LEU A  13      -2.108  -7.378  -2.227  1.00  0.00           H  
+ATOM     34  N   ALA A  14      -0.089  -9.359  -3.811  1.00  0.00           N  
+ATOM     35  CA  ALA A  14       1.099 -10.012  -4.321  1.00  0.00           C  
+ATOM     36  C   ALA A  14       1.590 -11.062  -3.322  1.00  0.00           C  
+ATOM     37  O   ALA A  14       2.231 -12.052  -3.699  1.00  0.00           O  
+ATOM     38  H   ALA A  14       0.032  -8.439  -3.390  1.00  0.00           H  
+ATOM     39  N   GLN A  15       1.272 -10.818  -2.044  1.00  0.00           N  
+ATOM     40  CA  GLN A  15       1.671 -11.728  -0.988  1.00  0.00           C  
+ATOM     41  C   GLN A  15       0.813 -12.992  -1.034  1.00  0.00           C  
+ATOM     42  O   GLN A  15       1.327 -14.114  -1.007  1.00  0.00           O  
+ATOM     43  H   GLN A  15       0.741  -9.993  -1.767  1.00  0.00           H  
+ATOM     44  N   ALA A  16      -0.502 -12.781  -1.104  1.00  0.00           N  
+ATOM     45  CA  ALA A  16      -1.437 -13.889  -1.154  1.00  0.00           C  
+ATOM     46  C   ALA A  16      -1.343 -14.591  -2.510  1.00  0.00           C  
+ATOM     47  O   ALA A  16      -1.864 -15.702  -2.690  1.00  0.00           O  
+ATOM     48  H   ALA A  16      -0.894 -11.844  -1.125  1.00  0.00           H  
+ATOM     49  N   VAL A  17      -0.669 -13.918  -3.451  1.00  0.00           N  
+ATOM     50  CA  VAL A  17      -0.501 -14.465  -4.783  1.00  0.00           C  
+ATOM     51  C   VAL A  17       0.619 -15.504  -4.784  1.00  0.00           C  
+ATOM     52  O   VAL A  17       0.488 -16.586  -5.376  1.00  0.00           O  
+ATOM     53  H   VAL A  17      -0.252 -13.006  -3.269  1.00  0.00           H  
+ATOM     54  N   PHE A  18       1.720 -15.149  -4.109  1.00  0.00           N  
+ATOM     55  CA  PHE A  18       2.864 -16.036  -4.026  1.00  0.00           C  
+ATOM     56  C   PHE A  18       2.470 -17.334  -3.319  1.00  0.00           C  
+ATOM     57  O   PHE A  18       2.741 -18.434  -3.806  1.00  0.00           O  
+ATOM     58  H   PHE A  18       1.796 -14.250  -3.633  1.00  0.00           H  
+ATOM     59  N   LEU A  19       1.824 -17.176  -2.164  1.00  0.00           N  
+ATOM     60  CA  LEU A  19       1.390 -18.320  -1.386  1.00  0.00           C  
+ATOM     61  C   LEU A  19       0.495 -19.222  -2.237  1.00  0.00           C  
+ATOM     62  O   LEU A  19       0.551 -20.395  -2.184  1.00  0.00           O  
+ATOM     63  H   LEU A  19       1.617 -16.257  -1.791  1.00  0.00           H  
+ATOM     64  N   LEU A  20      -0.326 -18.647  -3.018  1.00  0.00           N  
+ATOM     65  CA  LEU A  20      -1.231 -19.383  -3.879  1.00  0.00           C  
+ATOM     66  C   LEU A  20      -0.446 -20.069  -4.998  1.00  0.00           C  
+ATOM     67  O   LEU A  20      -0.758 -21.201  -5.396  1.00  0.00           O  
+ATOM     68  H   LEU A  20      -0.347 -17.678  -3.038  1.00  0.00           H  
+ATOM     69  N   LEU A  21       0.575 -19.356  -5.492  1.00  0.00           N  
+ATOM     70  CA  LEU A  21       1.405 -19.882  -6.557  1.00  0.00           C  
+ATOM     71  H   LEU A  21       0.805 -18.427  -5.142  1.00  0.00           H  
+TER      72      LEU A  21                                                      
+MASTER      114    0    0    1    0    0    0    6   57    1    0    2          
+END                                                                             

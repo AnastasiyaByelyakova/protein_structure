@@ -1,0 +1,665 @@
+HEADER    IMMUNOSUPPRESSANT                       24-FEB-92   1CYA              
+TITLE     NMR STUDIES OF (U-13C)CYCLOSPORIN A BOUND TO CYCLOPHILIN: BOUND       
+TITLE    2 CONFORMATION AND PORTIONS OF CYCLOSPORIN INVOLVED IN BINDING         
+CAVEAT     1CYA    THE PUBLICATION DESCRIBES DETERMINATION OF CYCLOSPORIN A     
+CAVEAT   2 1CYA    BOUND TO HUMAN CYCLOPHILIN. THE DEPOSITED ENTRY ONLY         
+CAVEAT   3 1CYA    CONTAINS THE COORDINATES FOR THE CYCLOSPORIN ENTITY          
+COMPND    MOL_ID: 1;                                                            
+COMPND   2 MOLECULE: CYCLOSPORIN A;                                             
+COMPND   3 CHAIN: A;                                                            
+COMPND   4 SYNONYM: CYCLOSPORINE, CICLOSPORIN, CICLOSPORINE;                    
+COMPND   5 ENGINEERED: YES                                                      
+SOURCE    MOL_ID: 1;                                                            
+SOURCE   2 SYNTHETIC: YES;                                                      
+SOURCE   3 ORGANISM_SCIENTIFIC: TOLYPOCLADIUM INFLATUM;                         
+SOURCE   4 ORGANISM_TAXID: 29910                                                
+KEYWDS    IMMUNOSUPPRESSANT, CYCLOSPORIN A                                      
+EXPDTA    SOLUTION NMR                                                          
+MDLTYP    MINIMIZED AVERAGE                                                     
+AUTHOR    S.W.FESIK                                                             
+REVDAT   6   05-JUN-24 1CYA    1       LINK                                     
+REVDAT   5   27-JUL-11 1CYA    1       HETATM REMARK                            
+REVDAT   4   13-JUL-11 1CYA    1       VERSN                                    
+REVDAT   3   24-FEB-09 1CYA    1       VERSN                                    
+REVDAT   2   01-APR-03 1CYA    1       JRNL                                     
+REVDAT   1   31-JAN-94 1CYA    0                                                
+JRNL        AUTH   S.W.FESIK,R.T.GAMPE,H.L.EATON,G.GEMMECKER,E.T.OLEJNICZAK,    
+JRNL        AUTH 2 P.NERI,T.F.HOLZMAN,D.A.EGAN,R.EDALJI                         
+JRNL        TITL   NMR STUDIES OF [U-13C]CYCLOSPORIN A BOUND TO CYCLOPHILIN:    
+JRNL        TITL 2 BOUND CONFORMATION AND PORTIONS OF CYCLOSPORIN INVOLVED IN   
+JRNL        TITL 3 BINDING.                                                     
+JRNL        REF    BIOCHEMISTRY                  V.  30  6574 1991              
+JRNL        REFN                   ISSN 0006-2960                               
+JRNL        PMID   2054356                                                      
+JRNL        DOI    10.1021/BI00240A030                                          
+REMARK   1                                                                      
+REMARK   1 REFERENCE 1                                                          
+REMARK   1  AUTH   S.W.FESIK,G.GEMMECKER,E.T.OLEJNICZAK,A.M.PETROS              
+REMARK   1  TITL   IDENTIFICATION OF SOLVENT-EXPOSED REGIONS OF ENZYME-BOUND    
+REMARK   1  TITL 2 LIGANDS BY NUCLEAR MAGNETIC RESONANCE                        
+REMARK   1  REF    J.AM.CHEM.SOC.                V. 113  7080 1991              
+REMARK   1  REFN                   ISSN 0002-7863                               
+REMARK   1  DOI    10.1021/JA00018A080                                          
+REMARK   1 REFERENCE 2                                                          
+REMARK   1  AUTH   P.NERI,R.MEADOWS,G.GEMMECKER,E.OLEJNICZAK,D.NETTESHEIM,      
+REMARK   1  AUTH 2 T.LOGAN,R.SIMMER,R.HELFRICH,T.HOLZMAN,J.SEVERIN,S.FESIK      
+REMARK   1  TITL   1H, 13C AND 15N BACKBONE ASSIGNMENTS OF CYCLOPHILIN WHEN     
+REMARK   1  TITL 2 BOUND TO CYCLOSPORIN A (CSA) AND PRELIMINARY STRUCTURAL      
+REMARK   1  TITL 3 CHARACTERIZATION OF THE CSA BINDING SITE                     
+REMARK   1  REF    FEBS LETT.                    V. 294    81 1991              
+REMARK   1  REFN                   ISSN 0014-5793                               
+REMARK   1  DOI    10.1016/0014-5793(91)81348-C                                 
+REMARK   2                                                                      
+REMARK   2 RESOLUTION. NOT APPLICABLE.                                          
+REMARK   3                                                                      
+REMARK   3 REFINEMENT.                                                          
+REMARK   3   PROGRAM     : X-PLOR                                               
+REMARK   3   AUTHORS     : HARE RESEARCH INC. (DSPACE), BRUNGER (X-PLOR)        
+REMARK   3                                                                      
+REMARK   3  OTHER REFINEMENT REMARKS: NULL                                      
+REMARK   4                                                                      
+REMARK   4 1CYA COMPLIES WITH FORMAT V. 3.30, 13-JUL-11                         
+REMARK 100                                                                      
+REMARK 100 THIS ENTRY HAS BEEN PROCESSED BY BNL.                                
+REMARK 100 THE DEPOSITION ID IS D_1000172593.                                   
+REMARK 210                                                                      
+REMARK 210 EXPERIMENTAL DETAILS                                                 
+REMARK 210  EXPERIMENT TYPE                : NMR                                
+REMARK 210  TEMPERATURE           (KELVIN) : NULL                               
+REMARK 210  PH                             : NULL                               
+REMARK 210  IONIC STRENGTH                 : NULL                               
+REMARK 210  PRESSURE                       : NULL                               
+REMARK 210  SAMPLE CONTENTS                : NULL                               
+REMARK 210                                                                      
+REMARK 210  NMR EXPERIMENTS CONDUCTED      : NULL                               
+REMARK 210  SPECTROMETER FIELD STRENGTH    : NULL                               
+REMARK 210  SPECTROMETER MODEL             : NULL                               
+REMARK 210  SPECTROMETER MANUFACTURER      : NULL                               
+REMARK 210                                                                      
+REMARK 210  STRUCTURE DETERMINATION.                                            
+REMARK 210   SOFTWARE USED                 : NULL                               
+REMARK 210   METHOD USED                   : NULL                               
+REMARK 210                                                                      
+REMARK 210 CONFORMERS, NUMBER CALCULATED   : NULL                               
+REMARK 210 CONFORMERS, NUMBER SUBMITTED    : 1                                  
+REMARK 210 CONFORMERS, SELECTION CRITERIA  : NULL                               
+REMARK 210                                                                      
+REMARK 210 BEST REPRESENTATIVE CONFORMER IN THIS ENSEMBLE : NULL                
+REMARK 210                                                                      
+REMARK 210 REMARK: NULL                                                         
+REMARK 215                                                                      
+REMARK 215 NMR STUDY                                                            
+REMARK 215 THE COORDINATES IN THIS ENTRY WERE GENERATED FROM SOLUTION           
+REMARK 215 NMR DATA.  PROTEIN DATA BANK CONVENTIONS REQUIRE THAT                
+REMARK 215 CRYST1 AND SCALE RECORDS BE INCLUDED, BUT THE VALUES ON              
+REMARK 215 THESE RECORDS ARE MEANINGLESS.                                       
+REMARK 300                                                                      
+REMARK 300 BIOMOLECULE: 1                                                       
+REMARK 300 SEE REMARK 350 FOR THE AUTHOR PROVIDED AND/OR PROGRAM                
+REMARK 300 GENERATED ASSEMBLY INFORMATION FOR THE STRUCTURE IN                  
+REMARK 300 THIS ENTRY. THE REMARK MAY ALSO PROVIDE INFORMATION ON               
+REMARK 300 BURIED SURFACE AREA.                                                 
+REMARK 350                                                                      
+REMARK 350 COORDINATES FOR A COMPLETE MULTIMER REPRESENTING THE KNOWN           
+REMARK 350 BIOLOGICALLY SIGNIFICANT OLIGOMERIZATION STATE OF THE                
+REMARK 350 MOLECULE CAN BE GENERATED BY APPLYING BIOMT TRANSFORMATIONS          
+REMARK 350 GIVEN BELOW.  BOTH NON-CRYSTALLOGRAPHIC AND                          
+REMARK 350 CRYSTALLOGRAPHIC OPERATIONS ARE GIVEN.                               
+REMARK 350                                                                      
+REMARK 350 BIOMOLECULE: 1                                                       
+REMARK 350 AUTHOR DETERMINED BIOLOGICAL UNIT: MONOMERIC                         
+REMARK 350 APPLY THE FOLLOWING TO CHAINS: A                                     
+REMARK 350   BIOMT1   1  1.000000  0.000000  0.000000        0.00000            
+REMARK 350   BIOMT2   1  0.000000  1.000000  0.000000        0.00000            
+REMARK 350   BIOMT3   1  0.000000  0.000000  1.000000        0.00000            
+REMARK 400                                                                      
+REMARK 400 COMPOUND                                                             
+REMARK 400 CYCLOSPORIN IS A CYCLIC UNDECAPEPTIDE.                               
+REMARK 400   HERE, CYCLOSPORIN A IS REPRESENTED BY THE SEQUENCE (SEQRES)        
+REMARK 400                                                                      
+REMARK 400 THE CYCLOSPORIN A IS CYCLIC PEPTIDE, A MEMBER OF IMMUNOSUPPRESSANT   
+REMARK 400 CLASS.                                                               
+REMARK 400                                                                      
+REMARK 400  GROUP: 1                                                            
+REMARK 400   NAME: CYCLOSPORIN A                                                
+REMARK 400   CHAIN: A                                                           
+REMARK 400   COMPONENT_1: PEPTIDE LIKE POLYMER                                  
+REMARK 400   DESCRIPTION: CYCLOSPORIN IS A CYCLIC UNDECAPEPTIDE. CYCLIZATION    
+REMARK 400                IS ACHIEVED BY LINKING THE N- AND THE C- TERMINI.     
+REMARK 500                                                                      
+REMARK 500 GEOMETRY AND STEREOCHEMISTRY                                         
+REMARK 500 SUBTOPIC: TORSION ANGLES                                             
+REMARK 500                                                                      
+REMARK 500 TORSION ANGLES OUTSIDE THE EXPECTED RAMACHANDRAN REGIONS:            
+REMARK 500 (M=MODEL NUMBER; RES=RESIDUE NAME; C=CHAIN IDENTIFIER;               
+REMARK 500 SSEQ=SEQUENCE NUMBER; I=INSERTION CODE).                             
+REMARK 500                                                                      
+REMARK 500 STANDARD TABLE:                                                      
+REMARK 500 FORMAT:(10X,I3,1X,A3,1X,A1,I4,A1,4X,F7.2,3X,F7.2)                    
+REMARK 500                                                                      
+REMARK 500 EXPECTED VALUES: GJ KLEYWEGT AND TA JONES (1996). PHI/PSI-           
+REMARK 500 CHOLOGY: RAMACHANDRAN REVISITED. STRUCTURE 4, 1395 - 1400            
+REMARK 500                                                                      
+REMARK 500  M RES CSSEQI        PSI       PHI                                   
+REMARK 500    ABA A   6       78.70   -116.16                                   
+REMARK 500                                                                      
+REMARK 500 REMARK: NULL                                                         
+REMARK 900                                                                      
+REMARK 900 RELATED ENTRIES                                                      
+REMARK 900 RELATED ID: 1BCK   RELATED DB: PDB                                   
+REMARK 900 CRYSTAL STRUCTURE OF HUMAN CYCLOPHILIN A COMPLEXED WITH CYCLOSPORIN  
+REMARK 900 C                                                                    
+REMARK 900 RELATED ID: 1C5F   RELATED DB: PDB                                   
+REMARK 900 CRYSTAL STRUCTURE OF THE CYCLOPHILIN-LIKE DOMAIN FROM BRUGIA MALAYI  
+REMARK 900 COMPLEXED WITH CYCLOSPORIN A                                         
+REMARK 900 RELATED ID: 1CSA   RELATED DB: PDB                                   
+REMARK 900 SOLUTION STRUCTURE OF E.COLI CYCLOPHILIN (F112W) COMPLEXED WITH      
+REMARK 900 CYCLOSPORIN A                                                        
+REMARK 900 RELATED ID: 1CWA   RELATED DB: PDB                                   
+REMARK 900 CRYSTAL STRUCTURE OF HUMAN CYCLOPHILIN A COMPLEXED WITH CYCLOSPORIN  
+REMARK 900 A                                                                    
+REMARK 900 RELATED ID: 1CWB   RELATED DB: PDB                                   
+REMARK 900 CRYSTAL STRUCTURE OF HUMAN CYCLOPHILIN A COMPLEXED WITH MODIFIED     
+REMARK 900 CYCLOSPORIN A AT POSITION 5                                          
+REMARK 900 RELATED ID: 1CWC   RELATED DB: PDB                                   
+REMARK 900 CRYSTAL STRUCTURE OF HUMAN CYCLOPHILIN A COMPLEXED WITH MODIFIED     
+REMARK 900 CYCLOSPORIN A AT POSITION 8                                          
+REMARK 900 RELATED ID: 1CWF   RELATED DB: PDB                                   
+REMARK 900 CRYSTAL STRUCTURE OF HUMAN CYCLOPHILIN A COMPLEXED WITH CYCLOSPORIN  
+REMARK 900 D                                                                    
+REMARK 900 RELATED ID: 1CWH   RELATED DB: PDB                                   
+REMARK 900 CRYSTAL STRUCTURE OF HUMAN CYCLOPHILIN A COMPLEXED WITH CYCLOSPORIN  
+REMARK 900 A MODIFIED AT POSITION 7                                             
+REMARK 900 RELATED ID: 1CWI   RELATED DB: PDB                                   
+REMARK 900 CRYSTAL STRUCTURE OF HUMAN CYCLOPHILIN A COMPLEXED WITH MODIFIED     
+REMARK 900 CYCLOSPORIN D AT POSITION 7                                          
+REMARK 900 RELATED ID: 1CWJ   RELATED DB: PDB                                   
+REMARK 900 CRYSTAL STRUCTURE OF HUMAN CYCLOPHILIN A COMPLEXED WITH MODIFIED     
+REMARK 900 CYCLOSPORIN D AT POSITIONS 5 AND 7.                                  
+REMARK 900 RELATED ID: 1CWK   RELATED DB: PDB                                   
+REMARK 900 CRYSTAL STRUCTURE OF HUMAN CYCLOPHILIN A COMPLEXED WITH MODIFIED     
+REMARK 900 CYCLOSPORIN D AT POSITIONS 5 AND 7.                                  
+REMARK 900 RELATED ID: 1CWL   RELATED DB: PDB                                   
+REMARK 900 CRYSTAL STRUCTURE OF HUMAN CYCLOPHILIN A COMPLEXED WITH MODIFIED     
+REMARK 900 CYCLOSPORIN A AT POSITION 8                                          
+REMARK 900 RELATED ID: 1CWM   RELATED DB: PDB                                   
+REMARK 900 CRYSTAL STRUCTURE OF HUMAN CYCLOPHILIN A COMPLEXED WITH MODIFIED     
+REMARK 900 CYCLOSPORIN A AT POSITION 8                                          
+REMARK 900 RELATED ID: 1CWO   RELATED DB: PDB                                   
+REMARK 900 CRYSTAL STRUCTURE OF HUMAN CYCLOPHILIN A COMPLEXED WITH NODIFIED     
+REMARK 900 CYCLOSPORIN C AT POSITIONS 1, AND 9                                  
+REMARK 900 RELATED ID: 1CYB   RELATED DB: PDB                                   
+REMARK 900 SOLUTION STRUCTURE OF HUMAN CYCLOPHILIN COMPLEXED WITH CYCLOSPORIN A 
+REMARK 900 RELATED ID: 1CYN   RELATED DB: PDB                                   
+REMARK 900 CRYSTAL STRUCTURE OF HUMAN CYCLOPHILIN B COMPLEXED WITH MODIFIED     
+REMARK 900 CYCLOSPORIN A                                                        
+REMARK 900 RELATED ID: 1IKF   RELATED DB: PDB                                   
+REMARK 900 CRYSTAL STRUCTURE OF CTCLOSPORIN-FAB COMPLEX                         
+REMARK 900 RELATED ID: 1M63   RELATED DB: PDB                                   
+REMARK 900 CRYSTAL STRUCTURE OF CALCINEURIN-CYCLOPHILIN-CYCLOSPORIN COMPLEX     
+REMARK 900 RELATED ID: 1MF8   RELATED DB: PDB                                   
+REMARK 900 CRYSTAL STRUCTURE OF HUMAN CALCINEURIN COMPLEXED WITH HUMAN          
+REMARK 900 CYCLOPHILIN AND CYCLOSPORIN A                                        
+REMARK 900 RELATED ID: 1MIK   RELATED DB: PDB                                   
+REMARK 900 CRYSTAL STRUCTURE OF HUMAN CYCLOPHILIN A COMPLEXED WITH MODIFIED     
+REMARK 900 CYCLOSPORIN A AT POSITION 6                                          
+REMARK 900 RELATED ID: 1QNG   RELATED DB: PDB                                   
+REMARK 900 CRYSTAL STRUCTURE OF PLASMODIUM FALCIPARUM CYCLOPHILIN COMPLEXED     
+REMARK 900 WITH CYCLOSPORIN A                                                   
+REMARK 900 RELATED ID: 1QNH   RELATED DB: PDB                                   
+REMARK 900 CRYSTAL STRUCTURE OF PLASMODIUM FALCIPARUM CYCLOPHILIN (DOUBLE       
+REMARK 900 MUTANT) COMPLEXED WITH CYCLOSPORIN A                                 
+REMARK 900 RELATED ID: 1XQ7   RELATED DB: PDB                                   
+REMARK 900 CRYSTAL STRUCTURE OF TRYPANOSOMA CRUZI CYCLOPHILIN COMPLEXED WITH    
+REMARK 900 CYCLOSPORIN A                                                        
+REMARK 900 RELATED ID: 2ESL   RELATED DB: PDB                                   
+REMARK 900 CRYSTAL STRUCTURE OF HUMAN CYCLOPHILIN C COMPLEXED WITH CYCLOSPORIN  
+REMARK 900 A                                                                    
+REMARK 900 RELATED ID: 2OJU   RELATED DB: PDB                                   
+REMARK 900 CRYSTAL STRUCTURE OF HUMAN CYCLOPHILIN J COMPLEXED WITH CYCLOSPORIN  
+REMARK 900 A                                                                    
+REMARK 900 RELATED ID: 2POY   RELATED DB: PDB                                   
+REMARK 900 CRYSTAL STRUCTURE OF CRYPTOSPORIDIUM PARVUM IOWA II CYCLOPHILIN A    
+REMARK 900 COMPLEXED WITH CYCLOSPORIN A                                         
+REMARK 900 RELATED ID: 2RMA   RELATED DB: PDB                                   
+REMARK 900 CRYSTAL STRUCTURE OF HUMAN CYCLOPHILIN A COMPLEXED WITH CYCLOSPORIN  
+REMARK 900 A                                                                    
+REMARK 900 RELATED ID: 2RMB   RELATED DB: PDB                                   
+REMARK 900 CRYSTAL STRUCTURE OF HUMAN CYCLOPHILIN A COMPLEXED WITH MODIFIED     
+REMARK 900 CYCLOSPORIN A AT POSITION 5                                          
+REMARK 900 RELATED ID: 2RMC   RELATED DB: PDB                                   
+REMARK 900 CRYSTAL STRUCTURE OF MURINE CYCLOPHILIN C COMPLEXED WITH             
+REMARK 900 CYCLOSPORIN A                                                        
+REMARK 900 RELATED ID: 2WFJ   RELATED DB: PDB                                   
+REMARK 900 CRYSTAL STRUCTURE OF THE PPIASE DOMAIN OF HUMAN CYCLOPHILIN G        
+REMARK 900 COMPLEXED WITH CYCLOSPORIN A                                         
+REMARK 900 RELATED ID: 2X2C   RELATED DB: PDB                                   
+REMARK 900 CRYSTAL STRUCTURE OF HUMAN ACETYL-CYPA COMPLEXED WITH CYCLOSPORINE A 
+REMARK 900 RELATED ID: 2X7K   RELATED DB: PDB                                   
+REMARK 900 CRYSTAL STRUCTURE OF PPIL1 COMPLEXED WITH CYCLOSPORINE A             
+REMARK 900 RELATED ID: 2Z6W   RELATED DB: PDB                                   
+REMARK 900 CRYSTAL STRUCTURE OF HUMAN CYCLOPHILIN D IN COMPLEX WITH             
+REMARK 900 CYCLOSPORIN A                                                        
+REMARK 900 RELATED ID: 3BO7   RELATED DB: PDB                                   
+REMARK 900 CRYSTAL STRUCTURE OF CYCLOSPHILIN A FROM TOXOPLASMA GONDII           
+REMARK 900 COMPLEXED WIT CYCLOSPORIN A                                          
+REMARK 900 RELATED ID: 3CYS   RELATED DB: PDB                                   
+REMARK 900 SOLUTION STRUCTURE OF THE HUMAN CYCLOSPORIN A COMPLEXED WITH         
+REMARK 900 CYCLOSPORIN A                                                        
+REMARK 900 RELATED ID: 3EOV   RELATED DB: PDB                                   
+REMARK 900 CRYSTAL STRUCTURE OF CYCLOPHILIN FROM LEISHMANIA DONOVANI COMPLEXED  
+REMARK 900 WITH CYCLOSPORIN A                                                   
+DBREF  1CYA A    1    11  NOR    NOR00033 NOR00033         1     11             
+SEQRES   1 A   11  DAL MLE MLE MVA BMT ABA SAR MLE VAL MLE ALA                  
+HET    DAL  A   1      10                                                       
+HET    MLE  A   2      22                                                       
+HET    MLE  A   3      22                                                       
+HET    MVA  A   4      19                                                       
+HET    BMT  A   5      30                                                       
+HET    ABA  A   6      13                                                       
+HET    SAR  A   7      10                                                       
+HET    MLE  A   8      22                                                       
+HET    MLE  A  10      22                                                       
+HETNAM     DAL D-ALANINE                                                        
+HETNAM     MLE N-METHYLLEUCINE                                                  
+HETNAM     MVA N-METHYLVALINE                                                   
+HETNAM     BMT 4-METHYL-4-[(E)-2-BUTENYL]-4,N-METHYL-THREONINE                  
+HETNAM     ABA ALPHA-AMINOBUTYRIC ACID                                          
+HETNAM     SAR SARCOSINE                                                        
+FORMUL   1  DAL    C3 H7 N O2                                                   
+FORMUL   1  MLE    4(C7 H15 N O2)                                               
+FORMUL   1  MVA    C6 H13 N O2                                                  
+FORMUL   1  BMT    C10 H19 N O3                                                 
+FORMUL   1  ABA    C4 H9 N O2                                                   
+FORMUL   1  SAR    C3 H7 N O2                                                   
+LINK         C   DAL A   1                 N   MLE A   2     1555   1555  1.32  
+LINK         N   DAL A   1                 C   ALA A  11     1555   1555  1.31  
+LINK         C   MLE A   2                 N   MLE A   3     1555   1555  1.32  
+LINK         C   MLE A   3                 N   MVA A   4     1555   1555  1.32  
+LINK         C   MVA A   4                 N   BMT A   5     1555   1555  1.34  
+LINK         C   BMT A   5                 N   ABA A   6     1555   1555  1.31  
+LINK         C   ABA A   6                 N   SAR A   7     1555   1555  1.32  
+LINK         C   SAR A   7                 N   MLE A   8     1555   1555  1.32  
+LINK         C   MLE A   8                 N   VAL A   9     1555   1555  1.31  
+LINK         C   VAL A   9                 N   MLE A  10     1555   1555  1.32  
+LINK         C   MLE A  10                 N   ALA A  11     1555   1555  1.31  
+CRYST1    1.000    1.000    1.000  90.00  90.00  90.00 P 1           1          
+ORIGX1      1.000000  0.000000  0.000000        0.00000                         
+ORIGX2      0.000000  1.000000  0.000000        0.00000                         
+ORIGX3      0.000000  0.000000  1.000000        0.00000                         
+SCALE1      1.000000  0.000000  0.000000        0.00000                         
+SCALE2      0.000000  1.000000  0.000000        0.00000                         
+SCALE3      0.000000  0.000000  1.000000        0.00000                         
+HETATM    1  N   DAL A   1      -3.475  -5.796  -2.483  1.00  0.00           N  
+HETATM    2  CA  DAL A   1      -2.306  -6.025  -3.402  1.00  0.00           C  
+HETATM    3  CB  DAL A   1      -2.629  -7.241  -4.253  1.00  0.00           C  
+HETATM    4  C   DAL A   1      -1.081  -6.271  -2.507  1.00  0.00           C  
+HETATM    5  O   DAL A   1      -1.268  -6.515  -1.331  1.00  0.00           O  
+HETATM    6  H   DAL A   1      -3.851  -6.548  -1.980  1.00  0.00           H  
+HETATM    7  HA  DAL A   1      -2.143  -5.180  -4.047  1.00  0.00           H  
+HETATM    8  HB1 DAL A   1      -2.723  -8.097  -3.609  1.00  0.00           H  
+HETATM    9  HB2 DAL A   1      -1.899  -7.467  -5.003  1.00  0.00           H  
+HETATM   10  HB3 DAL A   1      -3.553  -7.047  -4.767  1.00  0.00           H  
+HETATM   11  N   MLE A   2       0.129  -6.214  -3.025  1.00  0.00           N  
+HETATM   12  CN  MLE A   2       0.472  -5.872  -4.466  1.00  0.00           C  
+HETATM   13  CA  MLE A   2       1.320  -6.460  -2.112  1.00  0.00           C  
+HETATM   14  CB  MLE A   2       2.113  -7.681  -2.609  1.00  0.00           C  
+HETATM   15  CG  MLE A   2       1.186  -8.895  -2.842  1.00  0.00           C  
+HETATM   16  CD1 MLE A   2       2.033 -10.015  -3.442  1.00  0.00           C  
+HETATM   17  CD2 MLE A   2       0.605  -9.402  -1.515  1.00  0.00           C  
+HETATM   18  C   MLE A   2       2.192  -5.217  -2.182  1.00  0.00           C  
+HETATM   19  O   MLE A   2       3.235  -5.286  -2.801  1.00  0.00           O  
+HETATM   20  HN1 MLE A   2       1.516  -5.700  -4.607  1.00  0.00           H  
+HETATM   21  HN2 MLE A   2      -0.026  -4.979  -4.805  1.00  0.00           H  
+HETATM   22  HN3 MLE A   2       0.227  -6.688  -5.112  1.00  0.00           H  
+HETATM   23  HA  MLE A   2       1.059  -6.596  -1.077  1.00  0.00           H  
+HETATM   24  HB2 MLE A   2       2.849  -7.944  -1.863  1.00  0.00           H  
+HETATM   25  HB3 MLE A   2       2.634  -7.449  -3.525  1.00  0.00           H  
+HETATM   26  HG  MLE A   2       0.379  -8.653  -3.520  1.00  0.00           H  
+HETATM   27 HD11 MLE A   2       2.464  -9.691  -4.378  1.00  0.00           H  
+HETATM   28 HD12 MLE A   2       2.829 -10.279  -2.762  1.00  0.00           H  
+HETATM   29 HD13 MLE A   2       1.420 -10.886  -3.621  1.00  0.00           H  
+HETATM   30 HD21 MLE A   2      -0.021  -8.660  -1.045  1.00  0.00           H  
+HETATM   31 HD22 MLE A   2       0.002 -10.278  -1.703  1.00  0.00           H  
+HETATM   32 HD23 MLE A   2       1.405  -9.670  -0.841  1.00  0.00           H  
+HETATM   33  N   MLE A   3       1.790  -4.117  -1.574  1.00  0.00           N  
+HETATM   34  CN  MLE A   3       0.439  -3.831  -0.959  1.00  0.00           C  
+HETATM   35  CA  MLE A   3       2.656  -2.859  -1.659  1.00  0.00           C  
+HETATM   36  CB  MLE A   3       1.791  -1.722  -2.336  1.00  0.00           C  
+HETATM   37  CG  MLE A   3       1.380  -2.224  -3.724  1.00  0.00           C  
+HETATM   38  CD1 MLE A   3       0.188  -1.422  -4.211  1.00  0.00           C  
+HETATM   39  CD2 MLE A   3       2.580  -2.084  -4.695  1.00  0.00           C  
+HETATM   40  C   MLE A   3       3.209  -2.357  -0.358  1.00  0.00           C  
+HETATM   41  O   MLE A   3       2.838  -2.830   0.698  1.00  0.00           O  
+HETATM   42  HN1 MLE A   3      -0.208  -3.453  -1.738  1.00  0.00           H  
+HETATM   43  HN2 MLE A   3       0.543  -3.098  -0.172  1.00  0.00           H  
+HETATM   44  HN3 MLE A   3      -0.025  -4.685  -0.519  1.00  0.00           H  
+HETATM   45  HA  MLE A   3       3.537  -3.046  -2.240  1.00  0.00           H  
+HETATM   46  HB2 MLE A   3       2.264  -0.771  -2.458  1.00  0.00           H  
+HETATM   47  HB3 MLE A   3       0.945  -1.427  -1.735  1.00  0.00           H  
+HETATM   48  HG  MLE A   3       1.080  -3.255  -3.690  1.00  0.00           H  
+HETATM   49 HD11 MLE A   3      -0.612  -1.573  -3.497  1.00  0.00           H  
+HETATM   50 HD12 MLE A   3       0.438  -0.376  -4.249  1.00  0.00           H  
+HETATM   51 HD13 MLE A   3      -0.127  -1.781  -5.176  1.00  0.00           H  
+HETATM   52 HD21 MLE A   3       3.404  -2.746  -4.481  1.00  0.00           H  
+HETATM   53 HD22 MLE A   3       2.248  -2.333  -5.682  1.00  0.00           H  
+HETATM   54 HD23 MLE A   3       2.956  -1.073  -4.668  1.00  0.00           H  
+HETATM   55  N   MVA A   4       4.103  -1.390  -0.465  1.00  0.00           N  
+HETATM   56  CN  MVA A   4       4.970  -0.954  -1.659  1.00  0.00           C  
+HETATM   57  CA  MVA A   4       4.683  -0.841   0.826  1.00  0.00           C  
+HETATM   58  CB  MVA A   4       6.199  -1.216   0.929  1.00  0.00           C  
+HETATM   59  CG1 MVA A   4       6.738  -0.808   2.318  1.00  0.00           C  
+HETATM   60  CG2 MVA A   4       6.326  -2.751   0.872  1.00  0.00           C  
+HETATM   61  C   MVA A   4       4.507   0.698   0.855  1.00  0.00           C  
+HETATM   62  O   MVA A   4       5.520   1.365   0.795  1.00  0.00           O  
+HETATM   63  HN1 MVA A   4       5.295   0.065  -1.543  1.00  0.00           H  
+HETATM   64  HN2 MVA A   4       5.819  -1.605  -1.761  1.00  0.00           H  
+HETATM   65  HN3 MVA A   4       4.496  -0.991  -2.626  1.00  0.00           H  
+HETATM   66  HA  MVA A   4       4.233  -1.248   1.724  1.00  0.00           H  
+HETATM   67  HB  MVA A   4       6.807  -0.740   0.175  1.00  0.00           H  
+HETATM   68 HG11 MVA A   4       7.778  -1.090   2.392  1.00  0.00           H  
+HETATM   69 HG12 MVA A   4       6.662   0.250   2.503  1.00  0.00           H  
+HETATM   70 HG13 MVA A   4       6.187  -1.328   3.089  1.00  0.00           H  
+HETATM   71 HG21 MVA A   4       5.804  -3.188   1.711  1.00  0.00           H  
+HETATM   72 HG22 MVA A   4       5.907  -3.162  -0.032  1.00  0.00           H  
+HETATM   73 HG23 MVA A   4       7.368  -3.031   0.931  1.00  0.00           H  
+HETATM   74  N   BMT A   5       3.305   1.278   0.936  1.00  0.00           N  
+HETATM   75  CN  BMT A   5       2.094   0.372   0.750  1.00  0.00           C  
+HETATM   76  CA  BMT A   5       3.335   2.808   0.958  1.00  0.00           C  
+HETATM   77  C   BMT A   5       3.380   3.278   2.416  1.00  0.00           C  
+HETATM   78  O   BMT A   5       3.436   2.472   3.324  1.00  0.00           O  
+HETATM   79  CB  BMT A   5       2.080   3.494   0.319  1.00  0.00           C  
+HETATM   80  OG1 BMT A   5       0.946   3.159   1.107  1.00  0.00           O  
+HETATM   81  CG2 BMT A   5       1.791   3.038  -1.138  1.00  0.00           C  
+HETATM   82  CD1 BMT A   5       3.078   3.163  -1.967  1.00  0.00           C  
+HETATM   83  CD2 BMT A   5       0.661   3.873  -1.786  1.00  0.00           C  
+HETATM   84  CE  BMT A   5       0.987   5.370  -1.763  1.00  0.00           C  
+HETATM   85  CZ  BMT A   5       0.075   6.295  -1.293  1.00  0.00           C  
+HETATM   86  CH  BMT A   5       0.387   7.791  -1.258  1.00  0.00           C  
+HETATM   87  HN1 BMT A   5       2.079  -0.421   1.484  1.00  0.00           H  
+HETATM   88  HN2 BMT A   5       1.158   0.882   0.822  1.00  0.00           H  
+HETATM   89  HN3 BMT A   5       2.103  -0.038  -0.240  1.00  0.00           H  
+HETATM   90  HA  BMT A   5       4.185   3.229   0.433  1.00  0.00           H  
+HETATM   91  HB  BMT A   5       2.260   4.562   0.350  1.00  0.00           H  
+HETATM   92  HG1 BMT A   5       0.575   3.973   1.454  1.00  0.00           H  
+HETATM   93  HG2 BMT A   5       1.476   2.013  -1.181  1.00  0.00           H  
+HETATM   94 HD11 BMT A   5       3.593   4.081  -1.730  1.00  0.00           H  
+HETATM   95 HD12 BMT A   5       3.733   2.332  -1.745  1.00  0.00           H  
+HETATM   96 HD13 BMT A   5       2.846   3.145  -3.022  1.00  0.00           H  
+HETATM   97 HD22 BMT A   5      -0.263   3.706  -1.251  1.00  0.00           H  
+HETATM   98 HD23 BMT A   5       0.526   3.565  -2.812  1.00  0.00           H  
+HETATM   99  HE  BMT A   5       1.948   5.710  -2.119  1.00  0.00           H  
+HETATM  100  HZ  BMT A   5      -0.885   5.950  -0.938  1.00  0.00           H  
+HETATM  101  HH1 BMT A   5       0.947   8.015  -0.362  1.00  0.00           H  
+HETATM  102  HH2 BMT A   5       0.968   8.054  -2.129  1.00  0.00           H  
+HETATM  103  HH3 BMT A   5      -0.540   8.346  -1.255  1.00  0.00           H  
+HETATM  104  N   ABA A   6       3.358   4.572   2.612  1.00  0.00           N  
+HETATM  105  CA  ABA A   6       3.405   5.167   3.995  1.00  0.00           C  
+HETATM  106  C   ABA A   6       2.127   5.949   4.357  1.00  0.00           C  
+HETATM  107  O   ABA A   6       2.136   7.163   4.295  1.00  0.00           O  
+HETATM  108  CB  ABA A   6       4.604   6.107   4.072  1.00  0.00           C  
+HETATM  109  CG  ABA A   6       5.875   5.301   3.793  1.00  0.00           C  
+HETATM  110  H   ABA A   6       3.309   5.170   1.837  1.00  0.00           H  
+HETATM  111  HA  ABA A   6       3.583   4.403   4.739  1.00  0.00           H  
+HETATM  112  HB3 ABA A   6       4.660   6.549   5.056  1.00  0.00           H  
+HETATM  113  HB2 ABA A   6       4.501   6.894   3.339  1.00  0.00           H  
+HETATM  114  HG1 ABA A   6       5.811   4.839   2.819  1.00  0.00           H  
+HETATM  115  HG3 ABA A   6       6.737   5.950   3.819  1.00  0.00           H  
+HETATM  116  HG2 ABA A   6       5.994   4.530   4.540  1.00  0.00           H  
+HETATM  117  N   SAR A   7       1.051   5.287   4.726  1.00  0.00           N  
+HETATM  118  CA  SAR A   7      -0.206   6.045   5.082  1.00  0.00           C  
+HETATM  119  C   SAR A   7      -1.464   5.367   4.518  1.00  0.00           C  
+HETATM  120  O   SAR A   7      -2.278   4.900   5.290  1.00  0.00           O  
+HETATM  121  CN  SAR A   7       1.084   3.856   5.180  1.00  0.00           C  
+HETATM  122  HA2 SAR A   7      -0.182   7.061   4.706  1.00  0.00           H  
+HETATM  123  HA3 SAR A   7      -0.291   6.079   6.159  1.00  0.00           H  
+HETATM  124  HN1 SAR A   7       0.100   3.495   5.444  1.00  0.00           H  
+HETATM  125  HN2 SAR A   7       1.733   3.777   6.040  1.00  0.00           H  
+HETATM  126  HN3 SAR A   7       1.478   3.247   4.380  1.00  0.00           H  
+HETATM  127  N   MLE A   8      -1.628   5.308   3.215  1.00  0.00           N  
+HETATM  128  CN  MLE A   8      -0.722   5.876   2.157  1.00  0.00           C  
+HETATM  129  CA  MLE A   8      -2.862   4.641   2.639  1.00  0.00           C  
+HETATM  130  CB  MLE A   8      -3.581   5.564   1.602  1.00  0.00           C  
+HETATM  131  CG  MLE A   8      -4.251   6.864   2.230  1.00  0.00           C  
+HETATM  132  CD1 MLE A   8      -5.739   6.606   2.507  1.00  0.00           C  
+HETATM  133  CD2 MLE A   8      -3.643   7.262   3.575  1.00  0.00           C  
+HETATM  134  C   MLE A   8      -2.426   3.360   1.920  1.00  0.00           C  
+HETATM  135  O   MLE A   8      -2.083   3.388   0.754  1.00  0.00           O  
+HETATM  136  HN1 MLE A   8       0.282   5.963   2.526  1.00  0.00           H  
+HETATM  137  HN2 MLE A   8      -1.072   6.853   1.857  1.00  0.00           H  
+HETATM  138  HN3 MLE A   8      -0.718   5.234   1.290  1.00  0.00           H  
+HETATM  139  HA  MLE A   8      -3.570   4.352   3.405  1.00  0.00           H  
+HETATM  140  HB2 MLE A   8      -4.328   4.951   1.114  1.00  0.00           H  
+HETATM  141  HB3 MLE A   8      -2.925   5.875   0.805  1.00  0.00           H  
+HETATM  142  HG  MLE A   8      -4.149   7.727   1.582  1.00  0.00           H  
+HETATM  143 HD11 MLE A   8      -6.248   6.358   1.587  1.00  0.00           H  
+HETATM  144 HD12 MLE A   8      -6.194   7.489   2.933  1.00  0.00           H  
+HETATM  145 HD13 MLE A   8      -5.848   5.786   3.201  1.00  0.00           H  
+HETATM  146 HD21 MLE A   8      -4.148   8.152   3.920  1.00  0.00           H  
+HETATM  147 HD22 MLE A   8      -2.594   7.492   3.503  1.00  0.00           H  
+HETATM  148 HD23 MLE A   8      -3.802   6.493   4.312  1.00  0.00           H  
+ATOM    149  N   VAL A   9      -2.447   2.256   2.626  1.00  0.00           N  
+ATOM    150  CA  VAL A   9      -2.034   0.952   2.003  1.00  0.00           C  
+ATOM    151  C   VAL A   9      -3.320   0.301   1.436  1.00  0.00           C  
+ATOM    152  O   VAL A   9      -4.301   0.280   2.153  1.00  0.00           O  
+ATOM    153  CB  VAL A   9      -1.440   0.016   3.075  1.00  0.00           C  
+ATOM    154  CG1 VAL A   9      -0.966  -1.274   2.408  1.00  0.00           C  
+ATOM    155  CG2 VAL A   9      -0.227   0.673   3.737  1.00  0.00           C  
+ATOM    156  H   VAL A   9      -2.733   2.281   3.563  1.00  0.00           H  
+ATOM    157  HA  VAL A   9      -1.290   1.135   1.247  1.00  0.00           H  
+ATOM    158  HB  VAL A   9      -2.168  -0.230   3.837  1.00  0.00           H  
+ATOM    159 HG11 VAL A   9      -0.162  -1.053   1.725  1.00  0.00           H  
+ATOM    160 HG12 VAL A   9      -0.593  -1.955   3.156  1.00  0.00           H  
+ATOM    161 HG13 VAL A   9      -1.771  -1.753   1.870  1.00  0.00           H  
+ATOM    162 HG21 VAL A   9       0.556   0.871   3.033  1.00  0.00           H  
+ATOM    163 HG22 VAL A   9       0.179   0.009   4.483  1.00  0.00           H  
+ATOM    164 HG23 VAL A   9      -0.510   1.607   4.190  1.00  0.00           H  
+HETATM  165  N   MLE A  10      -3.338  -0.213   0.218  1.00  0.00           N  
+HETATM  166  CN  MLE A  10      -2.173  -0.250  -0.738  1.00  0.00           C  
+HETATM  167  CA  MLE A  10      -4.619  -0.844  -0.299  1.00  0.00           C  
+HETATM  168  CB  MLE A  10      -5.115  -0.090  -1.550  1.00  0.00           C  
+HETATM  169  CG  MLE A  10      -5.089   1.432  -1.318  1.00  0.00           C  
+HETATM  170  CD1 MLE A  10      -5.516   2.112  -2.617  1.00  0.00           C  
+HETATM  171  CD2 MLE A  10      -6.084   1.816  -0.218  1.00  0.00           C  
+HETATM  172  C   MLE A  10      -4.345  -2.303  -0.676  1.00  0.00           C  
+HETATM  173  O   MLE A  10      -3.218  -2.756  -0.655  1.00  0.00           O  
+HETATM  174  HN1 MLE A  10      -1.891   0.762  -0.988  1.00  0.00           H  
+HETATM  175  HN2 MLE A  10      -1.339  -0.730  -0.254  1.00  0.00           H  
+HETATM  176  HN3 MLE A  10      -2.392  -0.792  -1.642  1.00  0.00           H  
+HETATM  177  HA  MLE A  10      -5.413  -0.852   0.434  1.00  0.00           H  
+HETATM  178  HB2 MLE A  10      -6.137  -0.381  -1.746  1.00  0.00           H  
+HETATM  179  HB3 MLE A  10      -4.537  -0.339  -2.426  1.00  0.00           H  
+HETATM  180  HG  MLE A  10      -4.098   1.768  -1.043  1.00  0.00           H  
+HETATM  181 HD11 MLE A  10      -5.508   3.184  -2.491  1.00  0.00           H  
+HETATM  182 HD12 MLE A  10      -6.513   1.797  -2.888  1.00  0.00           H  
+HETATM  183 HD13 MLE A  10      -4.835   1.847  -3.412  1.00  0.00           H  
+HETATM  184 HD21 MLE A  10      -5.806   1.412   0.740  1.00  0.00           H  
+HETATM  185 HD22 MLE A  10      -7.070   1.459  -0.479  1.00  0.00           H  
+HETATM  186 HD23 MLE A  10      -6.110   2.889  -0.125  1.00  0.00           H  
+ATOM    187  N   ALA A  11      -5.383  -3.025  -1.010  1.00  0.00           N  
+ATOM    188  CA  ALA A  11      -5.187  -4.458  -1.393  1.00  0.00           C  
+ATOM    189  C   ALA A  11      -3.996  -4.603  -2.349  1.00  0.00           C  
+ATOM    190  O   ALA A  11      -3.569  -3.636  -2.948  1.00  0.00           O  
+ATOM    191  CB  ALA A  11      -6.459  -4.965  -2.070  1.00  0.00           C  
+ATOM    192  H   ALA A  11      -6.280  -2.631  -1.011  1.00  0.00           H  
+ATOM    193  HA  ALA A  11      -4.988  -5.031  -0.499  1.00  0.00           H  
+ATOM    194  HB1 ALA A  11      -7.296  -4.884  -1.392  1.00  0.00           H  
+ATOM    195  HB2 ALA A  11      -6.338  -5.999  -2.356  1.00  0.00           H  
+ATOM    196  HB3 ALA A  11      -6.665  -4.378  -2.953  1.00  0.00           H  
+TER     197      ALA A  11                                                      
+CONECT    1    2    6  189                                                      
+CONECT    2    1    3    4    7                                                 
+CONECT    3    2    8    9   10                                                 
+CONECT    4    2    5   11                                                      
+CONECT    5    4                                                                
+CONECT    6    1                                                                
+CONECT    7    2                                                                
+CONECT    8    3                                                                
+CONECT    9    3                                                                
+CONECT   10    3                                                                
+CONECT   11    4   12   13                                                      
+CONECT   12   11   20   21   22                                                 
+CONECT   13   11   14   18   23                                                 
+CONECT   14   13   15   24   25                                                 
+CONECT   15   14   16   17   26                                                 
+CONECT   16   15   27   28   29                                                 
+CONECT   17   15   30   31   32                                                 
+CONECT   18   13   19   33                                                      
+CONECT   19   18                                                                
+CONECT   20   12                                                                
+CONECT   21   12                                                                
+CONECT   22   12                                                                
+CONECT   23   13                                                                
+CONECT   24   14                                                                
+CONECT   25   14                                                                
+CONECT   26   15                                                                
+CONECT   27   16                                                                
+CONECT   28   16                                                                
+CONECT   29   16                                                                
+CONECT   30   17                                                                
+CONECT   31   17                                                                
+CONECT   32   17                                                                
+CONECT   33   18   34   35                                                      
+CONECT   34   33   42   43   44                                                 
+CONECT   35   33   36   40   45                                                 
+CONECT   36   35   37   46   47                                                 
+CONECT   37   36   38   39   48                                                 
+CONECT   38   37   49   50   51                                                 
+CONECT   39   37   52   53   54                                                 
+CONECT   40   35   41   55                                                      
+CONECT   41   40                                                                
+CONECT   42   34                                                                
+CONECT   43   34                                                                
+CONECT   44   34                                                                
+CONECT   45   35                                                                
+CONECT   46   36                                                                
+CONECT   47   36                                                                
+CONECT   48   37                                                                
+CONECT   49   38                                                                
+CONECT   50   38                                                                
+CONECT   51   38                                                                
+CONECT   52   39                                                                
+CONECT   53   39                                                                
+CONECT   54   39                                                                
+CONECT   55   40   56   57                                                      
+CONECT   56   55   63   64   65                                                 
+CONECT   57   55   58   61   66                                                 
+CONECT   58   57   59   60   67                                                 
+CONECT   59   58   68   69   70                                                 
+CONECT   60   58   71   72   73                                                 
+CONECT   61   57   62   74                                                      
+CONECT   62   61                                                                
+CONECT   63   56                                                                
+CONECT   64   56                                                                
+CONECT   65   56                                                                
+CONECT   66   57                                                                
+CONECT   67   58                                                                
+CONECT   68   59                                                                
+CONECT   69   59                                                                
+CONECT   70   59                                                                
+CONECT   71   60                                                                
+CONECT   72   60                                                                
+CONECT   73   60                                                                
+CONECT   74   61   75   76                                                      
+CONECT   75   74   87   88   89                                                 
+CONECT   76   74   77   79   90                                                 
+CONECT   77   76   78  104                                                      
+CONECT   78   77                                                                
+CONECT   79   76   80   81   91                                                 
+CONECT   80   79   92                                                           
+CONECT   81   79   82   83   93                                                 
+CONECT   82   81   94   95   96                                                 
+CONECT   83   81   84   97   98                                                 
+CONECT   84   83   85   99                                                      
+CONECT   85   84   86  100                                                      
+CONECT   86   85  101  102  103                                                 
+CONECT   87   75                                                                
+CONECT   88   75                                                                
+CONECT   89   75                                                                
+CONECT   90   76                                                                
+CONECT   91   79                                                                
+CONECT   92   80                                                                
+CONECT   93   81                                                                
+CONECT   94   82                                                                
+CONECT   95   82                                                                
+CONECT   96   82                                                                
+CONECT   97   83                                                                
+CONECT   98   83                                                                
+CONECT   99   84                                                                
+CONECT  100   85                                                                
+CONECT  101   86                                                                
+CONECT  102   86                                                                
+CONECT  103   86                                                                
+CONECT  104   77  105  110                                                      
+CONECT  105  104  106  108  111                                                 
+CONECT  106  105  107  117                                                      
+CONECT  107  106                                                                
+CONECT  108  105  109  112  113                                                 
+CONECT  109  108  114  115  116                                                 
+CONECT  110  104                                                                
+CONECT  111  105                                                                
+CONECT  112  108                                                                
+CONECT  113  108                                                                
+CONECT  114  109                                                                
+CONECT  115  109                                                                
+CONECT  116  109                                                                
+CONECT  117  106  118  121                                                      
+CONECT  118  117  119  122  123                                                 
+CONECT  119  118  120  127                                                      
+CONECT  120  119                                                                
+CONECT  121  117  124  125  126                                                 
+CONECT  122  118                                                                
+CONECT  123  118                                                                
+CONECT  124  121                                                                
+CONECT  125  121                                                                
+CONECT  126  121                                                                
+CONECT  127  119  128  129                                                      
+CONECT  128  127  136  137  138                                                 
+CONECT  129  127  130  134  139                                                 
+CONECT  130  129  131  140  141                                                 
+CONECT  131  130  132  133  142                                                 
+CONECT  132  131  143  144  145                                                 
+CONECT  133  131  146  147  148                                                 
+CONECT  134  129  135  149                                                      
+CONECT  135  134                                                                
+CONECT  136  128                                                                
+CONECT  137  128                                                                
+CONECT  138  128                                                                
+CONECT  139  129                                                                
+CONECT  140  130                                                                
+CONECT  141  130                                                                
+CONECT  142  131                                                                
+CONECT  143  132                                                                
+CONECT  144  132                                                                
+CONECT  145  132                                                                
+CONECT  146  133                                                                
+CONECT  147  133                                                                
+CONECT  148  133                                                                
+CONECT  149  134                                                                
+CONECT  151  165                                                                
+CONECT  165  151  166  167                                                      
+CONECT  166  165  174  175  176                                                 
+CONECT  167  165  168  172  177                                                 
+CONECT  168  167  169  178  179                                                 
+CONECT  169  168  170  171  180                                                 
+CONECT  170  169  181  182  183                                                 
+CONECT  171  169  184  185  186                                                 
+CONECT  172  167  173  187                                                      
+CONECT  173  172                                                                
+CONECT  174  166                                                                
+CONECT  175  166                                                                
+CONECT  176  166                                                                
+CONECT  177  167                                                                
+CONECT  178  168                                                                
+CONECT  179  168                                                                
+CONECT  180  169                                                                
+CONECT  181  170                                                                
+CONECT  182  170                                                                
+CONECT  183  170                                                                
+CONECT  184  171                                                                
+CONECT  185  171                                                                
+CONECT  186  171                                                                
+CONECT  187  172                                                                
+CONECT  189    1                                                                
+MASTER      217    0    9    0    0    0    0    6   85    1  174    1          
+END                                                                             

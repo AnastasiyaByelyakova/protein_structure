@@ -26,6 +26,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const validationContentDiv = document.getElementById('validation-content');
     const retrainingResultDiv = document.getElementById('retraining-result');
 
+    // Amino acid color scheme
+    const residueColors = {
+        'ALA': 'cyan',
+        'ARG': 'blue',
+        'ASN': 'green',
+        'ASP': 'lime',
+        'CYS': 'yellow',
+        'GLN': 'magenta',
+        'GLU': 'orange',
+        'GLY': 'red',
+        'HIS': 'purple',
+        'ILE': 'teal',
+        'LEU': 'olive',
+        'LYS': 'silver',
+        'MET': 'gold',
+        'PHE': 'maroon',
+        'PRO': 'pink',
+        'SER': 'brown',
+        'THR': 'navy',
+        'TRP': 'indigo',
+        'TYR': 'coral',
+        'VAL': 'white'
+    };
+
     const renderPredictionResults = (result) => {
         predictionResultDiv.innerHTML = '';
 
@@ -45,18 +69,51 @@ document.addEventListener('DOMContentLoaded', () => {
         if (result.pdb_data) {
             const viewerContainer = document.createElement('div');
             viewerContainer.id = 'protein-viewer';
-            viewerContainer.style.height = '400px';
+            viewerContainer.style.height = '500px';
             viewerContainer.style.width = '100%';
             viewerContainer.style.position = 'relative';
+            viewerContainer.style.border = '1px solid #ccc';
             predictionResultDiv.appendChild(viewerContainer);
 
             let viewer = $3Dmol.createViewer(viewerContainer);
             viewer.addModel(result.pdb_data, "pdb");
-            viewer.setStyle({}, {cartoon: {color: 'spectrum'}});
+            
+            // Apply color scheme
+            const atoms = viewer.getModel().selectedAtoms({});
+            for (let i = 0; i < atoms.length; i++) {
+                const atom = atoms[i];
+                atom.color = residueColors[atom.resn] || 'gray';
+            }
+            
+            viewer.setStyle({}, { stick: {} });
             viewer.zoomTo();
             viewer.render();
+            viewer.resize();
+            
+            fetchAndDisplayDescription(result.pdb_data);
         }
     };
+    
+    const fetchAndDisplayDescription = async (pdbData) => {
+        const descriptionContainer = document.createElement('div');
+        descriptionContainer.id = 'protein-description';
+        descriptionContainer.innerHTML = '<p>Generating description...</p>';
+        predictionResultDiv.appendChild(descriptionContainer);
+
+        try {
+            const response = await fetch('/describe_protein/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ pdb_data: pdbData })
+            });
+            const result = await response.json();
+            if (!response.ok) throw result;
+            descriptionContainer.innerHTML = `<h3>Protein Description:</h3><p>${result.description}</p>`;
+        } catch (error) {
+            handleError(descriptionContainer, error, 'Failed to generate description');
+        }
+    };
+
 
     const handleError = (div, error, prefix = 'Error') => {
         console.error(prefix, error);

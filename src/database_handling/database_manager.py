@@ -62,6 +62,10 @@ class DatabaseManager:
         base_class.metadata.create_all(bind=self.engine)
         logger.info("Tables created successfully.")
 
+    def create_protein(self, protein_data: dict) -> Protein:
+        """Creates a new Protein object from a dictionary of data."""
+        return Protein(**protein_data)
+
     def create_indexes(self):
         """Manually create indexes if needed (e.g., for JSONB keys)."""
         # This is more complex in SQLAlchemy and often handled automatically

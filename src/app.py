@@ -17,6 +17,7 @@ import copy
 import pandas as pd
 from dataclasses import asdict
 from sklearn.model_selection import train_test_split
+import google.generativeai as genai
 
 from tensorflow.keras.models import load_model
 from src.model.model_training import train_model, AttentionLayer
@@ -34,6 +35,7 @@ model_config = None
 paths_config = None
 feature_engineer = None
 last_validation_results = None
+gemini_api_key = None
 
 # --- Helper Functions ---
 def convert_numpy_types(obj):
@@ -52,12 +54,17 @@ def convert_numpy_types(obj):
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    global model, model_config, paths_config, feature_engineer, last_validation_results
+    global model, model_config, paths_config, feature_engineer, last_validation_results, gemini_api_key
     logger.info("Server startup...")
     try:
         CONFIG_DIR = Path(__file__).parent / 'config'
         paths_config_dict = load_config(CONFIG_DIR / "paths.yaml")['paths']
         model_config_dict = load_config(CONFIG_DIR / "model.yaml")['model']
+        credentials = load_config(CONFIG_DIR / "credentials.yaml")
+        gemini_api_key = credentials.get("gemini_api_key")
+
+        if gemini_api_key:
+            genai.configure(api_key=gemini_api_key)
 
         paths_config = PathsConfig(**{k: Path(v) for k, v in paths_config_dict.items()})
         model_config = ModelConfig(**model_config_dict)
@@ -129,13 +136,34 @@ async def predict_protein(sequence: str = Form(None), fasta_file: UploadFile = F
         df = pd.DataFrame(prediction_list, columns=['x', 'y', 'z'])
         csv_data = df.to_csv(index=False)
 
-        pdb_data = coordinates_to_pdb(prediction_list)
+        pdb_data = coordinates_to_pdb(prediction_list, current_sequence)
 
         return JSONResponse(content={"csv_data": csv_data, "pdb_data": pdb_data})
 
     except Exception as e:
         logger.error(f"Prediction failed: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=f"An error occurred during prediction: {e}")
+
+@app.post("/describe_protein/")
+async def describe_protein(request: Request):
+    if not gemini_api_key:
+        raise HTTPException(status_code=500, detail="Gemini API key not configured.")
+
+    try:
+        data = await request.json()
+        pdb_data = data.get('pdb_data')
+        if not pdb_data:
+            raise HTTPException(status_code=400, detail="PDB data is missing.")
+
+        model = genai.GenerativeModel('gemini-2.5-flash')
+        prompt = f"Provide a detailed analysis of the following protein structure, including secondary structure elements, functional annotations, and potential clinical relevance. Return the output in HTML format.\n\n{pdb_data}"
+        response = model.generate_content(prompt)
+        description = response.text.replace('```html','').replace('```','')
+        return JSONResponse({"description":description })
+
+    except Exception as e:
+        logger.error(f"Error generating description: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=f"Failed to generate description: {e}")
 
 @app.get("/model_info/")
 async def get_model_info():
