@@ -365,7 +365,7 @@ if __name__ == "__main__":
         model_config = ModelConfig(**model_config_dict)
 
         # Initialize DatabaseManager
-        db_.manager = DatabaseManager(db_url=database_config_dict['database_url'])
+        db_manager = DatabaseManager(db_url=database_config_dict['database_url'])
 
         # Run the main function with the new objects
         run_feature_engineering(db_manager, paths_config, model_config)
