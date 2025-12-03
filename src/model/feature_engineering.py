@@ -28,9 +28,9 @@ from tqdm import tqdm
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 # Import necessary components from your project
-from database_handling.database_manager import DatabaseManager
-from utils.config_loader import load_config
-from utils.config_loader import load_config, ModelConfig, PathsConfig
+from src.database_handling.database_manager import DatabaseManager
+from src.utils.config_loader import load_config
+from src.utils.config_loader import load_config, ModelConfig, PathsConfig
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -365,7 +365,7 @@ if __name__ == "__main__":
         model_config = ModelConfig(**model_config_dict)
 
         # Initialize DatabaseManager
-        db_manager = DatabaseManager(db_url=database_config_dict['database_url'])
+        db_.manager = DatabaseManager(db_url=database_config_dict['database_url'])
 
         # Run the main function with the new objects
         run_feature_engineering(db_manager, paths_config, model_config)

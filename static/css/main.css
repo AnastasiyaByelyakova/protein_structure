@@ -1,0 +1,151 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0; /* Remove body padding */
+    background-color: #e0f2f7; /* Light blue pastel */
+    color: #333;
+    line-height: 1.6;
+}
+
+header {
+    background-color: #b2ebf2; /* Slightly darker blue pastel */
+    color: #004d40; /* Darker teal */
+    padding: 15px 0;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2em;
+}
+
+nav ul {
+    padding: 0;
+    list-style: none;
+    margin-top: 10px;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+nav a {
+    color: #004d40; /* Darker teal */
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+nav a:hover {
+    color: #00796b; /* Even darker teal */
+}
+
+main {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 20px auto; /* Center the main content and add space */
+    background-color: #ffffff; /* White background for content area */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+section {
+    margin-bottom: 30px; /* Space between sections */
+    padding: 20px;
+    border: 1px solid #e0e0e0; /* Light grey border */
+    border-radius: 5px;
+    background-color: #f9fbe7; /* Light yellow pastel */
+}
+
+section h2 {
+    color: #558b2f; /* Olive green pastel */
+    margin-top: 0;
+    border-bottom: 2px solid #dce775; /* Lighter yellow-green */
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+/* Forms */
+form {
+    background-color: #fff9c4; /* Even lighter yellow pastel */
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+form div {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #827717; /* Darker yellow */
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+textarea,
+input[type="file"] {
+    width: calc(100% - 22px); /* Adjust for padding and border */
+    padding: 10px;
+    border: 1px solid #dce775; /* Lighter yellow-green */
+    border-radius: 4px;
+    font-size: 1em;
+    background-color: #fffde7; /* Very light yellow */
+}
+
+button {
+    background-color: #a5d6a7; /* Light green pastel */
+    color: #1b5e20; /* Dark green */
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #81c784; /* Slightly darker green pastel */
+}
+
+/* Results Display Areas */
+.result-box {
+    background-color: #e1bee7; /* Light purple pastel */
+    padding: 15px;
+    border: 1px solid #ce93d8; /* Medium purple pastel */
+    border-radius: 5px;
+    margin-top: 15px;
+    white-space: pre-wrap; /* Preserve whitespace and break lines */
+    font-family: monospace; /* Use a monospace font for code/data */
+    color: #4a148c; /* Dark purple */
+}
+
+.error-message {
+    color: #c62828; /* Dark red */
+    background-color: #ffcdd2; /* Light red pastel */
+    padding: 10px;
+    border: 1px solid #ef9a9a; /* Medium red pastel */
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+
+footer {
+    text-align: center;
+    padding: 15px 0;
+    margin-top: 30px;
+    background-color: #b2dfdb; /* Teal pastel */
+    color: #004d40; /* Darker teal */
+    font-size: 0.9em;
+}
+
+/* Class to hide elements */
+.hidden {
+    display: none;
+}

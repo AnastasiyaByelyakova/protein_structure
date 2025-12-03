@@ -24,10 +24,11 @@ import argparse
 from tqdm import tqdm
 from sklearn.model_selection import train_test_split
 import yaml
+import os
 
 # Import the entire model_training module to ensure custom layers are in scope
-from .model_training import *
-from utils.config_loader import load_config, ModelConfig, PathsConfig
+from src.model.model_training import *
+from src.utils.config_loader import load_config, ModelConfig, PathsConfig
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')

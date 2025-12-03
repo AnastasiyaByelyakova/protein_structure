@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protein Predictor</title>
+    <link rel="stylesheet" href="/static/css/main.css">
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/3Dmol.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Protein Predictor Interface</h1>
+        <nav>
+            <ul>
+                <li><a href="#prediction">Prediction</a></li>
+                <li><a href="#model-info">Model Info</a></li>
+                <li><a href="#validation">Validation</a></li>
+                <li><a href="#retraining">Retraining</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="prediction">
+            <h2>Predict Protein Structure</h2>
+            <div id="prediction-content">
+                <h3>Predict from Sequence</h3>
+                <form id="predict-sequence-form">
+                    <div>
+                        <label for="protein-sequence-input">Enter Protein Sequence:</label>
+                        <textarea id="protein-sequence-input" rows="5" cols="50" required></textarea>
+                    </div>
+                    <button type="submit">Predict</button>
+                </form>
+
+                <h3>Predict from FASTA File</h3>
+                <form id="predict-file-form">
+                    <div>
+                        <label for="fasta-file-input">Upload FASTA File:</label>
+                        <input type="file" id="fasta-file-input" accept=".fasta,.fa,.txt" required>
+                    </div>
+                    <button type="submit">Predict from File</button>
+                </form>
+                <div id="prediction-result"><p>Prediction results will appear here.</p></div>
+            </div>
+        </section>
+
+        <section id="model-info" class="hidden">
+            <h2>Model Information</h2>
+            <div id="model-info-content">
+                <p>Loading model information...</p>
+            </div>
+        </section>
+
+        <section id="validation" class="hidden">
+            <h2>Model Validation</h2>
+            <div id="validation-content">
+                <p>Loading validation results...</p>
+            </div>
+            <button id="run-validation-button">Run New Validation</button>
+        </section>
+
+        <section id="retraining" class="hidden">
+            <h2>Model Retraining</h2>
+            <div id="retraining-content">
+                <form id="retraining-form">
+                    <div>
+                        <label for="epochs">Epochs:</label>
+                        <input type="number" id="epochs" name="epochs" value="10">
+                    </div>
+                    <div>
+                        <label for="batch_size">Batch Size:</label>
+                        <input type="number" id="batch_size" name="batch_size" value="32">
+                    </div>
+                    <div>
+                        <label for="learning_rate">Learning Rate:</label>
+                        <input type="number" id="learning_rate" name="learning_rate" value="0.001" step="0.0001">
+                    </div>
+                    <div>
+                        <label for="new-dataset">New Dataset (optional):</label>
+                        <input type="file" id="new-dataset" name="new_dataset">
+                    </div>
+                    <button type="submit">Start Retraining</button>
+                </form>
+            </div>
+            <div id="retraining-result"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Protein Predictor</p>
+    </footer>
+
+    <script src="/static/js/main.js" defer></script>
+</body>
+</html>

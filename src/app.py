@@ -1,5 +1,7 @@
+
 import os
 import io
+import base64
 from pathlib import Path
 from fastapi import FastAPI, Request, HTTPException, UploadFile, File, Form
 from fastapi.responses import HTMLResponse, JSONResponse
@@ -12,6 +14,7 @@ import yaml
 import pickle
 import numpy as np
 import copy
+import pandas as pd
 from dataclasses import asdict
 from sklearn.model_selection import train_test_split
 
@@ -19,9 +22,10 @@ from tensorflow.keras.models import load_model
 from src.model.model_training import train_model, AttentionLayer
 from src.model.model_evaluation import ModelEvaluator
 from src.model.feature_engineering import FeatureEngineer, AMINO_ACID_PROPERTIES
-from utils.config_loader import PathsConfig, ModelConfig, load_config
+from src.utils.config_loader import PathsConfig, ModelConfig, load_config
+from src.data_handling.pdb_processor import coordinates_to_pdb
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 # --- Globals ---
@@ -46,15 +50,14 @@ def convert_numpy_types(obj):
         return [convert_numpy_types(i) for i in obj]
     return obj
 
-# --- FastAPI Lifespan (Startup & Shutdown) ---
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     global model, model_config, paths_config, feature_engineer, last_validation_results
-    logger.info("Server startup: Loading configurations and initializing components...")
+    logger.info("Server startup...")
     try:
-        CONFIG_DIR = os.path.join(os.path.dirname(__file__), 'config')
-        paths_config_dict = load_config(os.path.join(CONFIG_DIR, "paths.yaml"))['paths']
-        model_config_dict = load_config(os.path.join(CONFIG_DIR, "model.yaml"))['model']
+        CONFIG_DIR = Path(__file__).parent / 'config'
+        paths_config_dict = load_config(CONFIG_DIR / "paths.yaml")['paths']
+        model_config_dict = load_config(CONFIG_DIR / "model.yaml")['model']
 
         paths_config = PathsConfig(**{k: Path(v) for k, v in paths_config_dict.items()})
         model_config = ModelConfig(**model_config_dict)
@@ -63,134 +66,110 @@ async def lifespan(app: FastAPI):
 
         processed_data_path = paths_config.base_dir / paths_config.data_dir / paths_config.processed_data_file
         if processed_data_path.exists():
-            logger.info(f"Loading processed data from {processed_data_path} to fit scaler and PCA...")
+            logger.info(f"Loading data from {processed_data_path}")
             with open(processed_data_path, 'rb') as f:
                 data = pickle.load(f)
             feature_engineer.scaler = data.get('scaler')
             feature_engineer.pca_model = data.get('pca_model')
-            if feature_engineer.scaler:
-                logger.info("Scaler loaded for FeatureEngineer.")
-            else:
-                logger.warning("Scaler not found in processed data. Feature engineering might be incomplete.")
-            if feature_engineer.pca_model:
-                logger.info("PCA model loaded for FeatureEngineer.")
-            else:
-                logger.warning("PCA model not found in processed data. Feature engineering might be incomplete.")
 
         model_path = paths_config.base_dir / paths_config.models_dir / f"{model_config.model_name}_{model_config.model_version}.h5"
         if model_path.exists():
-            logger.info(f"Loading model from {model_path}...")
+            logger.info(f"Loading model from {model_path}")
             model = load_model(model_path, custom_objects={'AttentionLayer': AttentionLayer})
-            logger.info("Model loaded successfully.")
         else:
-            logger.warning(f"Model file not found at {model_path}. Prediction endpoint will not be available.")
+            logger.warning(f"Model file not found at {model_path}.")
             model = None
 
-        logger.info("Server startup complete.")
+        logger.info("Startup complete.")
         yield
-    except Exception as e:
-        logger.error(f"Failed to load configurations or initialize components during startup: {e}", exc_info=True)
-        raise
     finally:
         logger.info("Server shutdown.")
 
 app = FastAPI(lifespan=lifespan)
-templates = Jinja2Templates(directory=str(Path(__file__).parent / "static"))
-app.mount("/static", StaticFiles(directory=str(Path(__file__).parent / "static")), name="static")
 
-# --- Web Page Routes ---
+STATIC_DIR = "static"
+templates = Jinja2Templates(directory=STATIC_DIR)
+app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+
 @app.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
-# --- Core Functionality Endpoints ---
 def is_valid_protein_sequence(sequence: str) -> bool:
-    valid_chars = set(AMINO_ACID_PROPERTIES.keys())
-    return sequence and all(char.upper() in valid_chars for char in sequence)
+    return sequence and all(char.upper() in AMINO_ACID_PROPERTIES for char in sequence)
 
 @app.post("/predict/")
 async def predict_protein(sequence: str = Form(None), fasta_file: UploadFile = File(None)):
-    if not model or not feature_engineer or not model_config:
-        raise HTTPException(status_code=503, detail="Model or components not initialized.")
-    print(model)
-    print(["sequence",sequence])
+    if not model:
+        raise HTTPException(status_code=503, detail="Model is not initialized.")
+
+    current_sequence = ''
     if sequence:
-        if not is_valid_protein_sequence(sequence):
-            raise HTTPException(status_code=400, detail="Invalid protein sequence.")
-        sequences_to_predict = {'input_sequence': sequence}
+        current_sequence = sequence
     elif fasta_file:
         content = await fasta_file.read()
-        # Basic parsing, assuming single sequence FASTA
         lines = content.decode('utf-8').strip().split('\n')
-        if len(lines) < 2 or not lines[0].startswith('>'):
-             raise HTTPException(status_code=400, detail="Invalid FASTA file format.")
-        sequence = "".join(lines[1:])
-        if not is_valid_protein_sequence(sequence):
-            raise HTTPException(status_code=400, detail="Invalid protein sequence in FASTA file.")
-        sequences_to_predict = {'input_sequence': sequence}
-    else:
-        raise HTTPException(status_code=400, detail="No sequence provided.")
-    print("sequences_to_predict",
-           sequences_to_predict)
+        if not lines or not lines[0].startswith('>'):
+            raise HTTPException(status_code=400, detail="Invalid FASTA format.")
+        current_sequence = "".join(lines[1:])
+
+    if not is_valid_protein_sequence(current_sequence):
+        raise HTTPException(status_code=400, detail="Invalid or empty protein sequence.")
+
     try:
-        features = feature_engineer._sequence_to_features(sequences_to_predict['input_sequence'])
+        features = feature_engineer._sequence_to_features(current_sequence)
         padded = feature_engineer._pad_or_truncate(features, model_config.sequence_length, features.shape[1])
         normalized = feature_engineer.normalize_features(padded, fit=False)
-
-        if feature_engineer.pca_model:
-            reduced = feature_engineer.pca_model.transform(normalized)
-            X_predict = np.expand_dims(reduced, axis=0)
-        else:
-            X_predict = np.expand_dims(normalized, axis=0)
+        
+        X_predict = np.expand_dims(feature_engineer.pca_model.transform(normalized) if feature_engineer.pca_model else normalized, axis=0)
 
         prediction = model.predict(X_predict)
-        return JSONResponse(content={"predictions": prediction.tolist()})
+        prediction_list = prediction.tolist()[0]
+
+        df = pd.DataFrame(prediction_list, columns=['x', 'y', 'z'])
+        csv_data = df.to_csv(index=False)
+
+        pdb_data = coordinates_to_pdb(prediction_list)
+
+        return JSONResponse(content={"csv_data": csv_data, "pdb_data": pdb_data})
+
     except Exception as e:
         logger.error(f"Prediction failed: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=f"Error during prediction: {e}")
-
+        raise HTTPException(status_code=500, detail=f"An error occurred during prediction: {e}")
 
 @app.get("/model_info/")
 async def get_model_info():
     if not model or not model_config:
         raise HTTPException(status_code=503, detail="Model not loaded.")
-
+    
     stream = io.StringIO()
     model.summary(print_fn=lambda x: stream.write(x + '\n'))
-    model_summary = stream.getvalue()
-
-    info = {
-        "model_name": model_config.model_name,
-        "model_version": model_config.model_version,
-        "model_summary": model_summary,
-        "last_validation_results": "No recent validation results available."
-    }
-    if last_validation_results:
-        info["last_validation_results"] = convert_numpy_types(asdict(last_validation_results))
-
-    return JSONResponse(content=info)
+    
+    return JSONResponse({
+        "model_summary": stream.getvalue(),
+        "last_validation_results": convert_numpy_types(asdict(last_validation_results)) if last_validation_results else None
+    })
 
 @app.get("/validation/")
 async def get_validation_status():
-    if last_validation_results:
-        return JSONResponse(content=convert_numpy_types(asdict(last_validation_results)))
-    return JSONResponse(content={"status": "No validation has been run."})
+    if not last_validation_results:
+        return JSONResponse(content={"status": "No validation has been run."})
+    return JSONResponse(content=convert_numpy_types(asdict(last_validation_results)))
 
 @app.post("/run_validation/")
 async def trigger_validation():
     global last_validation_results
-    if not all([model, model_config, paths_config, feature_engineer]):
-        raise HTTPException(status_code=503, detail="Server components not initialized.")
+    if not all([model, paths_config, feature_engineer]):
+        raise HTTPException(status_code=503, detail="Server components not ready.")
 
-    logger.info("Triggering model validation...")
     try:
-        processed_data_path = paths_config.base_dir / paths_config.data_dir / paths_config.processed_data_file
-        if not processed_data_path.exists():
-            raise HTTPException(status_code=400, detail="Processed data file not found.")
-
-        with open(processed_data_path, 'rb') as f:
+        data_path = paths_config.base_dir / paths_config.data_dir / paths_config.processed_data_file
+        if not data_path.exists():
+            raise HTTPException(status_code=404, detail="Processed data not found.")
+        
+        with open(data_path, 'rb') as f:
             data = pickle.load(f)
-
+        
         _, X_val, _, y_val = train_test_split(data['X'], data['y'], test_size=0.1, random_state=42)
 
         model_path = paths_config.base_dir / paths_config.models_dir / f"{model_config.model_name}_{model_config.model_version}.h5"
@@ -198,14 +177,11 @@ async def trigger_validation():
         metrics, _ = evaluator.evaluate((X_val, y_val))
         last_validation_results = metrics
 
-        logger.info("Validation complete.")
-        return JSONResponse(content={
-            "message": "Validation completed successfully.",
-            "results": convert_numpy_types(asdict(metrics))
-        })
+        return JSONResponse({"results": convert_numpy_types(asdict(metrics))})
+
     except Exception as e:
-        logger.error(f"Error during validation: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=f"Error during validation: {e}")
+        logger.error(f"Validation failed: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/retrain_model/")
 async def trigger_retraining(
@@ -214,11 +190,7 @@ async def trigger_retraining(
     learning_rate: float = Form(...),
     new_dataset: Optional[UploadFile] = File(None)
 ):
-    global model, model_config, paths_config
-    if not all([model_config, paths_config]):
-        raise HTTPException(status_code=503, detail="Server components not initialized.")
-
-    logger.info(f"Triggering model retraining with params: epochs={epochs}, batch_size={batch_size}, lr={learning_rate}")
+    global model
 
     try:
         temp_config = copy.deepcopy(model_config)
@@ -226,49 +198,30 @@ async def trigger_retraining(
         temp_config.batch_size = batch_size
         temp_config.learning_rate = learning_rate
 
-        data_path_to_use = paths_config.base_dir / paths_config.data_dir / paths_config.processed_data_file
-
+        data_path = paths_config.base_dir / paths_config.data_dir / paths_config.processed_data_file
         if new_dataset and new_dataset.filename:
-            logger.info(f"Processing uploaded dataset: {new_dataset.filename}")
+            uploaded_path = paths_config.base_dir / paths_config.data_dir / "uploaded_data.pkl"
+            with open(uploaded_path, "wb") as f:
+                f.write(await new_dataset.read())
+            data_path = uploaded_path
 
-            content = await new_dataset.read()
-            if not content:
-                raise HTTPException(status_code=400, detail="The uploaded dataset file is empty.")
+        if not data_path.exists():
+            raise HTTPException(status_code=404, detail="Data file not found.")
 
-            uploaded_data_path = paths_config.base_dir / paths_config.data_dir / "uploaded_processed_data.pkl"
-            with open(uploaded_data_path, 'wb') as f:
-                f.write(content)
-            data_path_to_use = uploaded_data_path
-            logger.info(f"Using uploaded dataset from {data_path_to_use}")
-
-        if not data_path_to_use.exists():
-            raise HTTPException(status_code=400, detail=f"Data file not found at {data_path_to_use}.")
-
-        trained_model = train_model(
-            config=temp_config,
-            data_path=str(data_path_to_use),
-            model_dir=str(paths_config.base_dir / paths_config.models_dir)
-        )
-
+        trained_model = train_model(temp_config, str(data_path), str(paths_config.base_dir / paths_config.models_dir))
         model = trained_model
-        logger.info("Model retraining completed. New model is now loaded.")
 
-        return JSONResponse(content={
-            "message": "Model retraining completed successfully. The new model is now active.",
-            "new_config": asdict(temp_config)
-        })
+        return JSONResponse({"message": "Model retrained.", "new_config": asdict(temp_config)})
 
     except Exception as e:
-        logger.error(f"Error during retraining: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=f"Error during retraining: {e}")
+        logger.error(f"Retraining failed: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
 
-# --- Main Entry Point ---
 if __name__ == "__main__":
     import uvicorn
     try:
-        app_config = load_config(os.path.join(os.path.dirname(__file__), 'config', "app.yaml"))['app']
-        host = app_config.get("host", "0.0.0.0")
-        port = app_config.get("port", 8000)
+        app_config = load_config(Path(__file__).parent / 'config' / "app.yaml")['app']
+        host, port = app_config.get("host", "0.0.0.0"), app_config.get("port", 8000)
     except Exception:
         host, port = "0.0.0.0", 8000
 

@@ -21,7 +21,7 @@ from dataclasses import dataclass, asdict, fields
 from datetime import datetime
 import time # For timing epochs
 import yaml
-from utils.config_loader import load_config, ModelConfig, PathsConfig
+from src.utils.config_loader import load_config, ModelConfig, PathsConfig
 import os
 
 # Set up logging
