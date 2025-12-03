@@ -6,3 +6,4 @@ src/models/
 src/data/
 .venv/
 scr/plots
+data
