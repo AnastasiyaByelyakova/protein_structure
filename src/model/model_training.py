@@ -150,7 +150,7 @@ def train_model(model_config: ModelConfig, paths_config: PathsConfig):
 
     callbacks = [
         ModelCheckpoint(
-            filepath=str(paths_config.base_dir / paths_config.models_dir / f"{model_config.model_name}_{model_config.model_version}.h5"), 
+            filepath=str(paths_config.base_dir / paths_config.models_dir / f"{model_config.model_name}_{model_config.model_version}.keras"), 
             save_best_only=True, 
             monitor='val_loss' if validation_generator else 'loss', # Monitor training loss if no validation
             mode='min', 

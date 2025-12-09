@@ -1,3 +1,4 @@
+
 import os
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 import numpy as np
@@ -41,12 +42,13 @@ class ModelEvaluator:
         if not self.model_path.exists():
             raise FileNotFoundError(f"Model file not found at {self.model_path}")
         
-        # Load the model without compiling, then compile manually.
-        # This is a workaround for custom loss functions with complex TensorFlow operations.
-        model = keras.models.load_model(
-            self.model_path,
-            compile=False 
-        )
+        # Load the model with custom object scope for the custom loss function.
+        with keras.utils.custom_object_scope({'masked_mean_squared_error': masked_mean_squared_error}):
+            model = keras.models.load_model(
+                self.model_path,
+                compile=False 
+            )
+        
         model.compile(
             optimizer=tf.keras.optimizers.Adam(learning_rate=self.config.learning_rate),
             loss=masked_mean_squared_error,
@@ -147,12 +149,16 @@ def main():
         with open(manifest_path, 'r') as f:
             manifest = json.load(f)
         
-        # Use a portion of the data for testing
-        _, test_paths = train_test_split(manifest['sample_paths'], test_size=0.1, random_state=42)
-        
+        sample_paths = manifest['sample_paths']
+
+        if len(sample_paths) > 1:
+            _, test_paths = train_test_split(sample_paths, test_size=0.2, random_state=42)
+        else:
+            test_paths = sample_paths
+
         if not test_paths:
-            logger.warning("No samples found for evaluation. Check your dataset and split.")
-            return
+            logger.warning("No samples found for evaluation. Using all available samples.")
+            test_paths = sample_paths
 
         # Determine the actual feature dimension, same as in the training script
         use_pca = model_config.n_components is not None and model_config.n_components < BASE_FEATURE_DIM
@@ -160,13 +166,13 @@ def main():
 
         test_params = {
             'dim': (model_config.sequence_length, feature_dim),
-            'batch_size': model_config.batch_size,
+            'batch_size': 1,  # Always use a batch size of 1 for evaluation
             'base_dir': processed_dir,
             'shuffle': False # No need to shuffle for evaluation
         }
         test_generator = DataGenerator(test_paths, **test_params)
 
-        model_path = paths_config.base_dir / paths_config.models_dir / f"{model_config.model_name}_{model_config.model_version}.h5"
+        model_path = paths_config.base_dir / paths_config.models_dir / f"{model_config.model_name}_{model_config.model_version}.keras"
 
         evaluator = ModelEvaluator(model_config, model_path)
         raw_data = evaluator.evaluate(test_generator)
