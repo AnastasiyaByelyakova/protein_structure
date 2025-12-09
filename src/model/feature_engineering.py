@@ -1,4 +1,3 @@
-
 """
 Feature Engineering for Protein Structure Prediction
 Extracts and engineers features from protein sequences and structures for model training.
@@ -153,8 +152,7 @@ def run_feature_engineering(db_manager: DatabaseManager, paths_config: PathsConf
         if X_raw is not None and X_raw.shape[0] > 0:
             scaler.partial_fit(X_raw)
             if use_pca:
-                X_scaled = scaler.transform(X_raw) # Transform is needed for PCA fitting here
-                pca.partial_fit(X_scaled)
+                pca.partial_fit(X_raw)
     
     with open(processed_dir / "scaler.pkl", "wb") as f: pickle.dump(scaler, f)
     if use_pca: 
