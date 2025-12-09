@@ -14,6 +14,8 @@ from .db_models import *
 # from data_handling.pdb_processor import PDBProcessor # Needed for three_to_one_letter_aa mapping in get_training_dataset
 from sqlalchemy import or_ # For OR conditions in search queries
 from dataclasses import is_dataclass, asdict
+from pathlib import Path
+import yaml
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -83,6 +85,11 @@ class DatabaseManager:
             proteins = session.query(Protein).all()
             proteins =  [i.to_dict() for i in proteins]
             return proteins
+
+    def get_protein_by_pdb_id(self, pdb_id: str) -> Optional[Protein]:
+        """Retrieves a single protein by its PDB ID."""
+        with self.get_session() as session:
+            return session.query(Protein).filter_by(pdb_id=pdb_id).first()
 
     def get_database_stats(self) -> Dict[str, int]:
         """
@@ -182,9 +189,10 @@ class DatabaseManager:
 
 if __name__ == "__main__":
     # Example usage for standalone script
-    db_manager = DatabaseManager(
-        db_url="postgresql://neondb_owner:npg_v7N8UpXlYFun@ep-sweet-band-adaqfu6r-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
-    )
+    config_path = Path(__file__).parent.parent / 'config' / 'database.yaml'
+    with open(config_path, 'r') as f:
+        db_config = yaml.safe_load(f)
+    db_manager = DatabaseManager(db_url=db_config['database']['database_url'])
 
     # Note: create_tables is typically called by main_pipeline.py
     # For standalone testing, you'd need to import Base from db_models.

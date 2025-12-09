@@ -1,364 +1,184 @@
-"""
-Model Evaluation for Protein Structure Prediction
-Comprehensive evaluation of trained models including structural metrics and visualizations (Keras version)
-"""
-
+import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 import numpy as np
-import pandas as pd
 import tensorflow as tf
 from tensorflow import keras
-from tensorflow.keras import layers, Model
 import matplotlib.pyplot as plt
-import seaborn as sns
 from mpl_toolkits.mplot3d import Axes3D
-from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+from sklearn.metrics import mean_absolute_error
 from scipy.spatial.distance import pdist, squareform
 from scipy.stats import pearsonr
 import logging
 from pathlib import Path
-from typing import Dict, List, Tuple, Optional, Any
 import pickle
 import json
-from dataclasses import dataclass, asdict
 import argparse
 from tqdm import tqdm
 from sklearn.model_selection import train_test_split
 import yaml
-import os
-
-# Import the entire model_training module to ensure custom layers are in scope
-from src.model.model_training import *
-from src.utils.config_loader import load_config, ModelConfig, PathsConfig
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+from model.model_training import DataGenerator, masked_mean_squared_error
+from utils.config_loader import load_config, ModelConfig, PathsConfig
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-@dataclass
-class EvaluationMetrics:
-    """Container for evaluation metrics"""
-    # Coordinate-based metrics
-    rmsd: float
-    gdt_ts: float
-    gdt_ha: float
-    # Distance-based metrics
-    distance_mae: float
-    distance_rmse: float
-    distance_correlation: float
-    # Contact-based metrics
-    contact_precision_5A: float
-    contact_recall_5A: float
-    contact_f1_5A: float
+# --- Constants ---
+# This should match the value in model_training.py and feature_engineering.py
+BASE_FEATURE_DIM = 5
 
 class ModelEvaluator:
-    """
-    Evaluates a trained Keras model for protein structure prediction.
-    """
-    def __init__(self, config: Any, model_path: Path):
-        """
-        Initializes the evaluator with the model and configuration.
-
-        Args:
-            config: An object containing model configurations.
-            model_path: The path to the trained Keras model file (.h5).
-        """
+    """Evaluates a trained Keras model for protein structure prediction using a data generator."""
+    def __init__(self, config: ModelConfig, model_path: Path):
         self.config = config
         self.model_path = model_path
         self.model = self._load_model()
-        logger.info(f"Model {self.config.model_name} loaded from {self.model_path}")
 
     def _load_model(self):
-        """Loads the saved Keras model."""
-        if not os.path.exists(self.model_path):
+        logger.info(f"Loading model from {self.model_path}...")
+        if not self.model_path.exists():
             raise FileNotFoundError(f"Model file not found at {self.model_path}")
-
-        # Need to pass the custom layers to the load_model function
-        return keras.models.load_model(
+        
+        # Load the model without compiling, then compile manually.
+        # This is a workaround for custom loss functions with complex TensorFlow operations.
+        model = keras.models.load_model(
             self.model_path,
-            custom_objects={'AttentionLayer': AttentionLayer}
+            compile=False 
         )
+        model.compile(
+            optimizer=tf.keras.optimizers.Adam(learning_rate=self.config.learning_rate),
+            loss=masked_mean_squared_error,
+            metrics=['mean_absolute_error']
+        )
+        logger.info("Model loaded and re-compiled successfully.")
+        return model
 
-    def _calculate_rmsd(self, true_coords: np.ndarray, pred_coords: np.ndarray) -> float:
-        """
-        Calculates Root Mean Square Deviation (RMSD).
+    def evaluate(self, test_generator: DataGenerator):
+        logger.info(f"Running evaluation on {len(test_generator.sample_paths)} samples...")
 
-        Args:
-            true_coords: True coordinates, shape (N, 3).
-            pred_coords: Predicted coordinates, shape (N, 3).
+        # Use the generator for predictions
+        y_pred = self.model.predict(test_generator, verbose=1)
 
-        Returns:
-            The RMSD value in Angstroms.
-        """
-        # Ensure coordinates have the same shape
-        if true_coords.shape != pred_coords.shape:
-            raise ValueError("Coordinate arrays must have the same shape.")
+        # We need the ground truth data, so let's iterate through the generator to get it
+        y_true = []
+        for i in tqdm(range(len(test_generator)), desc="Fetching ground truth data"):
+            _, y_batch = test_generator[i]
+            y_true.extend(y_batch)
+        y_true = np.array(y_true)
+        
+        # The number of samples might not be a perfect multiple of the batch size
+        num_samples = y_pred.shape[0]
+        y_true = y_true[:num_samples]
 
-        # Calculate squared differences
-        diff = true_coords - pred_coords
-        sq_diff = diff**2
-
-        # Calculate mean squared difference and take the square root
-        rmsd = np.sqrt(np.mean(sq_diff))
-        return rmsd
-
-    def _calculate_gdt(self, true_coords: np.ndarray, pred_coords: np.ndarray) -> Tuple[float, float]:
-        """
-        Calculates Global Distance Test (GDT) metrics.
-        This is a simplified version for illustration.
-
-        Args:
-            true_coords: True coordinates, shape (N, 3).
-            pred_coords: Predicted coordinates, shape (N, 3).
-
-        Returns:
-            A tuple (gdt_ts, gdt_ha).
-        """
-        distances = np.linalg.norm(true_coords - pred_coords, axis=1)
-
-        # GDT-TS (Total Score) thresholds
-        thresholds_ts = [1.0, 2.0, 4.0, 8.0]
-        gdt_ts_scores = [np.sum(distances <= t) / len(distances) for t in thresholds_ts]
-        gdt_ts = np.mean(gdt_ts_scores)
-
-        # GDT-HA (High Accuracy) thresholds
-        thresholds_ha = [0.5, 1.0, 2.0, 4.0]
-        gdt_ha_scores = [np.sum(distances <= t) / len(distances) for t in thresholds_ha]
-        gdt_ha = np.mean(gdt_ha_scores)
-
-        return gdt_ts, gdt_ha
-
-    def _calculate_contact_metrics(self, true_coords: np.ndarray, pred_coords: np.ndarray, threshold: float = 5.0):
-        """
-        Calculates contact map metrics (Precision, Recall, F1-score).
-
-        Args:
-            true_coords: True coordinates, shape (N, 3).
-            pred_coords: Predicted coordinates, shape (N, 3).
-            threshold: Distance threshold for a contact (in Angstroms).
-
-        Returns:
-            A tuple (precision, recall, f1).
-        """
-        # Calculate distance matrices
-        true_dist_matrix = squareform(pdist(true_coords))
-        pred_dist_matrix = squareform(pdist(pred_coords))
-
-        # Create contact maps
-        true_contacts = (true_dist_matrix < threshold).astype(int)
-        pred_contacts = (pred_dist_matrix < threshold).astype(int)
-
-        # Count true positives, false positives, false negatives
-        tp = np.sum(true_contacts * pred_contacts)
-        fp = np.sum((1 - true_contacts) * pred_contacts)
-        fn = np.sum(true_contacts * (1 - pred_contacts))
-
-        precision = tp / (tp + fp) if (tp + fp) > 0 else 0
-        recall = tp / (tp + fn) if (tp + fn) > 0 else 0
-        f1 = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0
-
-        return precision, recall, f1
-
-    def _calculate_distance_metrics(self, true_coords: np.ndarray, pred_coords: np.ndarray):
-        """
-        Calculates distance-based metrics (MAE, RMSE, Correlation).
-
-        Args:
-            true_coords: True coordinates, shape (N, 3).
-            pred_coords: Predicted coordinates, shape (N, 3).
-
-        Returns:
-            A tuple (mae, rmse, corr).
-        """
-        true_dist_matrix = squareform(pdist(true_coords))
-        pred_dist_matrix = squareform(pdist(pred_coords))
-
-        # Exclude the diagonal (self-distances)
-        true_distances = true_dist_matrix[np.triu_indices(true_dist_matrix.shape[0], k=1)]
-        pred_distances = pred_dist_matrix[np.triu_indices(pred_dist_matrix.shape[0], k=1)]
-
-        mae = mean_absolute_error(true_distances, pred_distances)
-        rmse = np.sqrt(mean_squared_error(true_distances, pred_distances))
-
-        # Pearson correlation coefficient
-        corr, _ = pearsonr(true_distances, pred_distances)
-
-        return mae, rmse, corr
-
-    def evaluate(self, test_dataset: Tuple[np.ndarray, np.ndarray]) -> Tuple[EvaluationMetrics, List[Dict[str, Any]]]:
-        """
-        Runs the full evaluation pipeline.
-
-        Args:
-            test_dataset: A tuple (X_test, y_test) of numpy arrays.
-
-        Returns:
-            A tuple containing an EvaluationMetrics object and raw data for visualization.
-        """
-        X_test, y_test = test_dataset
-
-        logger.info(f"Running evaluation on {len(X_test)} samples...")
-
-        # Predict coordinates for the test set
-        y_pred = self.model.predict(X_test)
-
-        # Ensure the predicted coordinates have a consistent shape
-        if y_pred.shape != y_test.shape:
-            # Handle potential shape mismatches, e.g., due to masking or padding
-            logger.warning(f"Shape mismatch: y_pred={y_pred.shape}, y_test={y_test.shape}. "
-                           "This may indicate issues with padding or model output.")
-
-        # Initialize lists to store metrics per protein
-        rmsd_list, gdt_ts_list, gdt_ha_list = [], [], []
-        dist_mae_list, dist_rmse_list, dist_corr_list = [], [], []
-        contact_prec_list, contact_rec_list, contact_f1_list = [], [], []
-
+        rmsd_list, gdt_ts_list, dist_mae_list = [], [], []
         raw_data = []
 
-        # Iterate over each protein in the test set
-        for i in tqdm(range(len(X_test)), desc="Calculating metrics per sample"):
-            true_coords = y_test[i]
+        for i in tqdm(range(num_samples), desc="Calculating metrics"):
+            true_coords = y_true[i]
             pred_coords = y_pred[i]
 
             # Filter out padded zeros
-            non_zero_indices = np.any(true_coords != 0, axis=1)
-            true_coords_filtered = true_coords[non_zero_indices]
-            pred_coords_filtered = pred_coords[non_zero_indices]
+            mask = np.any(true_coords != 0, axis=1)
+            true_coords_filtered = true_coords[mask]
+            pred_coords_filtered = pred_coords[mask]
 
-            # Calculate metrics if there are valid residues
-            if len(true_coords_filtered) > 1: # Need at least 2 points for distance metrics
-                rmsd_list.append(self._calculate_rmsd(true_coords_filtered, pred_coords_filtered))
-                gdt_ts, gdt_ha = self._calculate_gdt(true_coords_filtered, pred_coords_filtered)
+            if len(true_coords_filtered) > 1:
+                rmsd = np.sqrt(np.mean(np.sum((true_coords_filtered - pred_coords_filtered)**2, axis=1)))
+                rmsd_list.append(rmsd)
+                
+                distances = np.linalg.norm(true_coords_filtered - pred_coords_filtered, axis=1)
+                gdt_ts = np.mean([np.sum(distances <= t) / len(distances) for t in [1.0, 2.0, 4.0, 8.0]])
                 gdt_ts_list.append(gdt_ts)
-                gdt_ha_list.append(gdt_ha)
 
-                mae, rmse, corr = self._calculate_distance_metrics(true_coords_filtered, pred_coords_filtered)
-                dist_mae_list.append(mae)
-                dist_rmse_list.append(rmse)
-                dist_corr_list.append(corr)
+                true_dist_matrix = squareform(pdist(true_coords_filtered))
+                pred_dist_matrix = squareform(pdist(pred_coords_filtered))
+                dist_mae_list.append(mean_absolute_error(true_dist_matrix, pred_dist_matrix))
 
-                prec, rec, f1 = self._calculate_contact_metrics(true_coords_filtered, pred_coords_filtered)
-                contact_prec_list.append(prec)
-                contact_rec_list.append(rec)
-                contact_f1_list.append(f1)
+                raw_data.append({'true_coords': true_coords_filtered, 'pred_coords': pred_coords_filtered})
 
-                raw_data.append({
-                    'true_coords': true_coords_filtered,
-                    'pred_coords': pred_coords_filtered,
-                })
+        # Print average metrics
+        logger.info("--- Evaluation Summary ---")
+        logger.info(f"Average RMSD: {np.mean(rmsd_list):.3f} Å")
+        logger.info(f"Average GDT-TS: {np.mean(gdt_ts_list):.3f}")
+        logger.info(f"Average Distance MAE: {np.mean(dist_mae_list):.3f}")
 
-        # Calculate average metrics
-        avg_metrics = EvaluationMetrics(
-            rmsd=np.mean(rmsd_list),
-            gdt_ts=np.mean(gdt_ts_list),
-            gdt_ha=np.mean(gdt_ha_list),
-            distance_mae=np.mean(dist_mae_list),
-            distance_rmse=np.mean(dist_rmse_list),
-            distance_correlation=np.mean(dist_corr_list),
-            contact_precision_5A=np.mean(contact_prec_list),
-            contact_recall_5A=np.mean(contact_rec_list),
-            contact_f1_5A=np.mean(contact_f1_list)
-        )
+        return raw_data
 
-        logger.info("Evaluation complete.")
-        return avg_metrics, raw_data
-
-    def visualize_results(self, raw_data: List[Dict[str, Any]], num_examples: int = 3):
-        """
-        Visualizes a few predicted vs. true structures.
-
-        Args:
-            raw_data: A list of dictionaries with true and predicted coordinates.
-            num_examples: Number of examples to visualize.
-        """
+    def visualize_results(self, raw_data: list, output_path: Path, num_examples: int = 3):
         logger.info(f"Visualizing {num_examples} protein structures...")
-
-        # Create a figure with subplots
-        fig = plt.figure(figsize=(num_examples * 8, 8))
-        for i in range(min(num_examples, len(raw_data))):
-            true_coords = raw_data[i]['true_coords']
-            pred_coords = raw_data[i]['pred_coords']
-
-            # True structure plot
-            ax_true = fig.add_subplot(2, num_examples, i + 1, projection='3d')
-            ax_true.plot(true_coords[:, 0], true_coords[:, 1], true_coords[:, 2], 'o-', label='True Structure', color='blue')
-            ax_true.set_title(f'True Structure (Example {i+1})')
-            ax_true.set_xlabel('X')
-            ax_true.set_ylabel('Y')
-            ax_true.set_zlabel('Z')
-            ax_true.legend()
-
-            # Predicted structure plot
-            ax_pred = fig.add_subplot(2, num_examples, i + 1 + num_examples, projection='3d')
-            ax_pred.plot(pred_coords[:, 0], pred_coords[:, 1], pred_coords[:, 2], 'o-', label='Predicted Structure', color='red')
-            ax_pred.set_title(f'Predicted Structure (Example {i+1})')
-            ax_pred.set_xlabel('X')
-            ax_pred.set_ylabel('Y')
-            ax_pred.set_zlabel('Z')
-            ax_pred.legend()
-
+        num_to_plot = min(num_examples, len(raw_data))
+        if num_to_plot == 0:
+            logger.warning("No data to visualize.")
+            return
+            
+        fig = plt.figure(figsize=(num_to_plot * 7, 6))
+        for i in range(num_to_plot):
+            ax = fig.add_subplot(1, num_to_plot, i + 1, projection='3d')
+            ax.plot(raw_data[i]['true_coords'][:, 0], raw_data[i]['true_coords'][:, 1], raw_data[i]['true_coords'][:, 2], 'o-', label='True', color='blue')
+            ax.plot(raw_data[i]['pred_coords'][:, 0], raw_data[i]['pred_coords'][:, 1], raw_data[i]['pred_coords'][:, 2], 'o-', label='Predicted', color='red')
+            ax.set_title(f'Structure Example {i+1}')
+            ax.set_xlabel('X'); ax.set_ylabel('Y'); ax.set_zlabel('Z')
+            ax.legend()
         plt.tight_layout()
-        plt.show()
+        plt.savefig(output_path)
+        logger.info(f"Visualization saved to {output_path}")
+        plt.close()
 
-
-if __name__ == "__main__":
+def main():
     parser = argparse.ArgumentParser(description="Evaluate a protein structure prediction model.")
     args = parser.parse_args()
 
-    # Load configurations and data
+    config_dir = Path(__file__).parent.parent / 'config'
     try:
-        config_dir = os.path.join(os.path.dirname(__file__), '..', 'config')
+        paths_config_dict = load_config(config_dir / "paths.yaml")['paths']
+        model_config_dict = load_config(config_dir / "model.yaml")['model']
 
-        paths_config_dict = load_config(os.path.join(config_dir, "paths.yaml"))['paths']
-        model_config_dict = load_config(os.path.join(config_dir, "model.yaml"))['model']
-
-        # Create dataclass objects
-        paths_config = PathsConfig(**{
-            k: Path(v) if k.endswith('_dir') or k == 'base_dir' else v
-            for k, v in paths_config_dict.items()
-        })
+        paths_config = PathsConfig(**{k: Path(v) if 'dir' in k or 'file' in k else v for k, v in paths_config_dict.items()})
         model_config = ModelConfig(**model_config_dict)
 
-        processed_data_path = paths_config.base_dir/ paths_config.data_dir / paths_config.processed_data_file
-        if not processed_data_path.exists():
-            raise FileNotFoundError(f"Processed data file not found at {processed_data_path}. Please run feature engineering first.")
+        processed_dir = paths_config.base_dir / paths_config.data_dir / "processed"
+        manifest_path = processed_dir / "manifest.json"
 
-        with open(processed_data_path, 'rb') as f:
-            data = pickle.load(f)
+        if not manifest_path.exists():
+            raise FileNotFoundError(f"Manifest file not found at {manifest_path}. Please run feature engineering first.")
 
-        X = data['X']
-        y = data['y']
+        with open(manifest_path, 'r') as f:
+            manifest = json.load(f)
+        
+        # Use a portion of the data for testing
+        _, test_paths = train_test_split(manifest['sample_paths'], test_size=0.1, random_state=42)
+        
+        if not test_paths:
+            logger.warning("No samples found for evaluation. Check your dataset and split.")
+            return
 
-        # Use a small portion of the data for testing
-        _, X_test, _, y_test = train_test_split(X, y, test_size=0.1, random_state=42)
-        test_dataset = (X_test, y_test)
+        # Determine the actual feature dimension, same as in the training script
+        use_pca = model_config.n_components is not None and model_config.n_components < BASE_FEATURE_DIM
+        feature_dim = model_config.n_components if use_pca else BASE_FEATURE_DIM
 
-        # If no model path is provided, try to find the latest best model in the models directory
-        model_path_to_use = Path(str(paths_config.base_dir/paths_config.models_dir/model_config.model_name)+'_'+model_config.model_version+'.h5')
+        test_params = {
+            'dim': (model_config.sequence_length, feature_dim),
+            'batch_size': model_config.batch_size,
+            'base_dir': processed_dir,
+            'shuffle': False # No need to shuffle for evaluation
+        }
+        test_generator = DataGenerator(test_paths, **test_params)
 
-        # Initialize evaluator
-        evaluator = ModelEvaluator(model_config, model_path_to_use)
+        model_path = paths_config.base_dir / paths_config.models_dir / f"{model_config.model_name}_{model_config.model_version}.h5"
 
-        # Evaluate the model
-        metrics, raw_data = evaluator.evaluate(test_dataset)
+        evaluator = ModelEvaluator(model_config, model_path)
+        raw_data = evaluator.evaluate(test_generator)
+        
+        if raw_data:
+            output_plot_path = paths_config.base_dir / paths_config.models_dir / f"{model_config.model_name}_{model_config.model_version}_evaluation_visuals.png"
+            evaluator.visualize_results(raw_data, output_plot_path)
+        else:
+            logger.warning("No data was generated for visualization.")
 
-        # Print summary metrics
-        logger.info("\n--- Evaluation Summary ---")
-        logger.info(f"Average RMSD: {metrics.rmsd:.3f} Å")
-        logger.info(f"Average GDT-TS: {metrics.gdt_ts:.3f}")
-        logger.info(f"Average GDT-HA: {metrics.gdt_ha:.3f}")
-        logger.info(f"Average Distance MAE: {metrics.distance_mae:.3f}")
-        logger.info(f"Average Distance RMSE: {metrics.distance_rmse:.3f}")
-        logger.info(f"Average Distance Correlation (Pearson): {metrics.distance_correlation:.3f}")
-        logger.info(f"Average 5Å Contact Precision: {metrics.contact_precision_5A:.3f}")
-        logger.info(f"Average 5Å Contact Recall: {metrics.contact_recall_5A:.3f}")
-        logger.info(f"Average 5Å Contact F1-Score: {metrics.contact_f1_5A:.3f}")
-
-        # Create visualizations
-        evaluator.visualize_results(raw_data)
-
-    except FileNotFoundError as e:
-        logger.error(f"File not found: {e}")
-    except (yaml.YAMLError, KeyError) as e:
-        logger.error(f"Error loading configuration files or data: {e}")
     except Exception as e:
-        logger.error(f"An unexpected error occurred during evaluation: {e}")
+        logger.error(f"An unexpected error occurred during evaluation: {e}", exc_info=True)
+
+if __name__ == "__main__":
+    main()

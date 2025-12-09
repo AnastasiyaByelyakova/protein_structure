@@ -1,214 +1,190 @@
-"""
-Model Training for Protein Structure Prediction
-Trains deep learning models to predict 3D protein structures from sequences and features using Keras.
-"""
-
+import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 import numpy as np
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers, Model
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
-from typing import Dict, List, Tuple, Optional, Any, Union
+from typing import List, Tuple, Any
 import logging
 from pathlib import Path
 import pickle
 import json
 import matplotlib.pyplot as plt
-import seaborn as sns
 from sklearn.model_selection import train_test_split
 import argparse
-from dataclasses import dataclass, asdict, fields
-from datetime import datetime
-import time # For timing epochs
 import yaml
-from src.utils.config_loader import load_config, ModelConfig, PathsConfig
-import os
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+from utils.config_loader import load_config, ModelConfig, PathsConfig
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-# Set TensorFlow global policy to float32 for consistency
-tf.keras.mixed_precision.set_global_policy('float32')
+# --- Constants ---
+# The number of physicochemical properties for each amino acid.
+# This should match the number of features defined in feature_engineering.py
+BASE_FEATURE_DIM = 5
 
-# --- Custom Keras Layers ---
-class AttentionLayer(layers.Layer):
-    """
-    Custom Attention Layer
-    A simple attention mechanism to weight the input features.
-    """
-    def __init__(self, **kwargs):
-        super(AttentionLayer, self).__init__(**kwargs)
+# --- Data Generator ---
+class DataGenerator(keras.utils.Sequence):
+    """Generates data for Keras, loading samples from individual files."""
+    def __init__(self, sample_paths: List[str], base_dir: Path, batch_size: int, dim: Tuple[int, int], shuffle: bool = True):
+        self.sample_paths = sample_paths
+        self.base_dir = base_dir
+        self.batch_size = batch_size
+        self.dim = dim
+        self.shuffle = shuffle
+        self.on_epoch_end()
 
-    def build(self, input_shape):
-        self.W = self.add_weight(name='attention_weight',
-                                 shape=(input_shape[-1], 1),
-                                 initializer='glorot_uniform',
-                                 trainable=True)
-        self.b = self.add_weight(name='attention_bias',
-                                 shape=(input_shape[1], 1),
-                                 initializer='zeros',
-                                 trainable=True)
-        super(AttentionLayer, self).build(input_shape)
+    def __len__(self) -> int:
+        """Denotes the number of batches per epoch."""
+        return int(np.floor(len(self.sample_paths) / self.batch_size))
 
-    def call(self, x):
-        # Alignment scores
-        e = tf.keras.backend.tanh(tf.keras.backend.dot(x, self.W) + self.b)
-        # Softmax to get weights
-        a = tf.keras.backend.softmax(e, axis=1)
-        # Weighted sum
-        output = x * a
-        return tf.keras.backend.sum(output, axis=1)
+    def __getitem__(self, index: int) -> Tuple[np.ndarray, np.ndarray]:
+        """Generate one batch of data."""
+        indexes = self.indexes[index*self.batch_size:(index+1)*self.batch_size]
+        batch_sample_paths = [self.sample_paths[k] for k in indexes]
+        
+        X, y = self.__data_generation(batch_sample_paths)
+        return X, y
 
-    def get_config(self):
-        config = super(AttentionLayer, self).get_config()
-        return config
+    def on_epoch_end(self):
+        """Updates indexes after each epoch."""
+        self.indexes = np.arange(len(self.sample_paths))
+        if self.shuffle:
+            np.random.shuffle(self.indexes)
+
+    def __data_generation(self, batch_sample_paths: List[str]) -> Tuple[np.ndarray, np.ndarray]:
+        """Generates data containing batch_size samples."""
+        # The feature dimension is the second element of self.dim
+        X = np.empty((self.batch_size, self.dim[0], self.dim[1]))
+        y = np.empty((self.batch_size, self.dim[0], 3)) # Assuming coordinate_dim is 3
+
+        for i, path in enumerate(batch_sample_paths):
+            try:
+                with open(self.base_dir / path, 'rb') as f:
+                    sample = pickle.load(f)
+                X[i,] = sample['X']
+                y[i,] = sample['y']
+            except (FileNotFoundError, pickle.UnpicklingError) as e:
+                logger.error(f"Error loading sample {path}: {e}")
+                # Fill with zeros if a sample is corrupted or missing
+                X[i,] = np.zeros(self.dim)
+                y[i,] = np.zeros((self.dim[0], 3)) 
+        return X, y
+
+# --- Custom Loss Function ---
+def masked_mean_squared_error(y_true, y_pred):
+    mask = tf.cast(tf.reduce_any(y_true != 0.0, axis=-1), dtype=tf.float32)
+    squared_error = tf.square(y_true - y_pred)
+    masked_squared_error = squared_error * tf.expand_dims(mask, -1)
+    total_error = tf.reduce_sum(masked_squared_error)
+    num_non_padded_elements = tf.reduce_sum(mask) * tf.cast(tf.shape(y_true)[-1], tf.float32)
+    return total_error / (num_non_padded_elements + 1e-8)
 
 # --- Model Definition ---
-def build_model(config: Any) -> Model:
-    """
-    Builds the deep learning model for protein structure prediction.
-
-    Args:
-        config: A ModelConfig object containing model parameters.
-
-    Returns:
-        A compiled Keras Model.
-    """
-    logger.info("Building model...")
-
-    # Input layer for the protein sequence features
-    input_features = keras.Input(shape=(config.sequence_length, config.feature_dim))
-
-    # Encoder part (e.g., a stack of Bidirectional LSTMs or GRUs)
-    # This helps the model understand the sequence context.
-    lstm_1 = layers.Bidirectional(layers.LSTM(128, return_sequences=True, dropout=config.dropout_rate))(input_features)
-    lstm_2 = layers.Bidirectional(layers.LSTM(64, return_sequences=True, dropout=config.dropout_rate))(lstm_1)
-
-    # Attention mechanism to focus on important parts of the sequence
-    attention_out = AttentionLayer()(lstm_2)
-
-    # Dense layers to predict coordinates
-    dense_1 = layers.Dense(128, activation='relu')(attention_out)
-    dense_2 = layers.Dense(64, activation='relu')(dense_1)
-
-    # The output layer predicts the 3D coordinates (x, y, z) for each residue.
-    # The output shape will be (sequence_length, 3).
-    # Since our attention layer has a summed output, we need to adapt the model architecture.
-    # A simple approach is to use a dense layer on the attention output.
-    output_coords = layers.Dense(config.sequence_length * config.coordinate_dim, activation='linear')(dense_2)
-
-    # Reshape the output to (sequence_length, 3)
-    output_coords = layers.Reshape((config.sequence_length, config.coordinate_dim))(output_coords)
-
+def build_model(config: ModelConfig, feature_dim: int) -> Model:
+    logger.info(f"Building model with feature dimension: {feature_dim}")
+    input_features = keras.Input(shape=(config.sequence_length, feature_dim), name="input_features")
+    masked_input = layers.Masking(mask_value=0.0)(input_features)
+    lstm_1 = layers.Bidirectional(layers.LSTM(128, return_sequences=True, dropout=config.dropout_rate))(masked_input)
+    lstm_2 = layers.Bidirectional(layers.LSTM(128, return_sequences=True, dropout=config.dropout_rate))(lstm_1)
+    dense_1 = layers.TimeDistributed(layers.Dense(64, activation='relu'))(lstm_2)
+    output_coords = layers.TimeDistributed(layers.Dense(config.coordinate_dim, activation='linear'), name="output_coords")(dense_1)
     model = Model(inputs=input_features, outputs=output_coords, name=config.model_name)
-
-    # Compile the model
     model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=config.learning_rate),
-                  loss='mean_squared_error',
-                  metrics=['mean_absolute_error'])
-
+                  loss=masked_mean_squared_error, metrics=['mean_absolute_error'])
     logger.info("Model built and compiled successfully.")
     model.summary()
     return model
 
-def train_model(config: Any, data_path: Path, model_dir: Path) -> Model:
-    """
-    Loads data, trains the model, and saves the trained model.
-
-    Args:
-        config: A ModelConfig object with training parameters.
-        data_path: Path to the processed training data.
-        model_dir: Directory to save the trained model.
-
-    Returns:
-        The trained Keras Model.
-    """
+def train_model(model_config: ModelConfig, paths_config: PathsConfig):
     logger.info("Starting model training pipeline...")
+    
+    processed_dir = paths_config.base_dir / paths_config.data_dir / "processed"
+    manifest_path = processed_dir / "manifest.json"
 
-    # Load processed data
-    with open(data_path, 'rb') as f:
-        data = pickle.load(f)
+    if not manifest_path.exists():
+        logger.error(f"Manifest file not found at {manifest_path}. Please run feature_engineering.py first.")
+        return
 
-    X = data['X']
-    y = data['y']
+    with open(manifest_path, 'r') as f:
+        manifest = json.load(f)
+    sample_paths = manifest["sample_paths"]
 
-    # Split data into training and validation sets
-    X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=42)
+    if not sample_paths:
+        logger.error("No samples found in manifest. Please run feature_engineering.py to process the data.")
+        return
 
-    logger.info(f"Training data shape: X={X_train.shape}, y={y_train.shape}")
-    logger.info(f"Validation data shape: X={X_val.shape}, y={y_val.shape}")
+    train_paths, val_paths = train_test_split(sample_paths, test_size=0.2, random_state=42)
 
-    # Build the model
-    model = build_model(config)
+    # Determine the actual feature dimension based on the config
+    # This logic must match the logic in feature_engineering.py
+    use_pca = model_config.n_components is not None and model_config.n_components < BASE_FEATURE_DIM
+    feature_dim = model_config.n_components if use_pca else BASE_FEATURE_DIM
 
-    # Define callbacks
-    early_stopping = EarlyStopping(monitor='val_loss', patience=config.patience, min_delta=config.min_delta, verbose=1)
-    model_checkpoint = ModelCheckpoint(
-        filepath=os.path.join(model_dir, f"{config.model_name}_{config.model_version}.h5"),
-        save_best_only=True,
-        monitor='val_loss',
-        mode='min',
-        verbose=1
-    )
-    reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=5, min_lr=1e-6, verbose=1)
+    params = {
+        'dim': (model_config.sequence_length, feature_dim),
+        'batch_size': model_config.batch_size,
+        'base_dir': processed_dir,
+    }
 
-    # Train the model
+    training_generator = DataGenerator(train_paths, shuffle=True, **params)
+    validation_generator = DataGenerator(val_paths, shuffle=False, **params)
+
+    model = build_model(model_config, feature_dim)
+
+    callbacks = [
+        EarlyStopping(monitor='val_loss', patience=model_config.patience, verbose=1),
+        ModelCheckpoint(
+            filepath=str(paths_config.base_dir / paths_config.models_dir / f"{model_config.model_name}_{model_config.model_version}.h5"), 
+            save_best_only=True, 
+            monitor='val_loss', 
+            mode='min', 
+            verbose=1
+        ),
+        ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=5, min_lr=1e-6, verbose=1)
+    ]
+
     history = model.fit(
-        X_train, y_train,
-        epochs=config.epochs,
-        batch_size=config.batch_size,
-        validation_data=(X_val, y_val),
-        callbacks=[early_stopping, model_checkpoint, reduce_lr]
+        training_generator,
+        validation_data=validation_generator,
+        epochs=model_config.epochs,
+        callbacks=callbacks
     )
 
-    # Plot training history
+    # Save training history plot
     plt.figure(figsize=(12, 6))
     plt.plot(history.history['loss'], label='Training Loss')
     plt.plot(history.history['val_loss'], label='Validation Loss')
     plt.title('Model Loss over Epochs')
     plt.xlabel('Epoch')
-    plt.ylabel('Loss (MSE)')
+    plt.ylabel('Loss')
     plt.legend()
     plt.grid(True)
-    plt.savefig(os.path.join(model_dir, f"{config.model_name}_{config.model_version}_training_history.png"))
-    plt.show()
-
+    plot_path = paths_config.base_dir / paths_config.models_dir / f"{model_config.model_name}_{model_config.model_version}_training_history.png"
+    plt.savefig(plot_path)
+    logger.info(f"Training history plot saved to {plot_path}")
+    
     logger.info("Model training completed.")
-    return model
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Train a protein structure prediction model.")
-    parser.add_argument("--config_path", type=str, default="config", help="Path to the configuration directory.")
     args = parser.parse_args()
 
+    config_dir = Path(__file__).parent.parent / 'config'
     try:
-        # Load all necessary configurations
-        config_dir = os.path.join(os.path.dirname(__file__), '..', 'config')
+        paths_config_dict = load_config(config_dir / "paths.yaml")['paths']
+        model_config_dict = load_config(config_dir / "model.yaml")['model']
 
-        paths_config_dict = load_config(os.path.join(config_dir, "paths.yaml"))['paths']
-        database_config_dict = load_config(os.path.join(config_dir, "database.yaml"))['database']
-        model_config_dict = load_config(os.path.join(config_dir, "model.yaml"))['model']
-
-        # Create dataclass objects
-        paths_config = PathsConfig(**{
-            k: Path(v) if k.endswith('_dir') or k == 'base_dir' else v
-            for k, v in paths_config_dict.items()
-        })
+        paths_config = PathsConfig(**{k: Path(v) if 'dir' in k or 'file' in k else v for k, v in paths_config_dict.items()})
         model_config = ModelConfig(**model_config_dict)
 
-        # Ensure the model directory exists
-        Path(paths_config.base_dir/paths_config.models_dir).mkdir(parents=True, exist_ok=True)
-        logger.info(f"Ensuring model directory exists: {Path(paths_config.models_dir).resolve()}")
+        (paths_config.base_dir / paths_config.models_dir).mkdir(parents=True, exist_ok=True)
 
-        # Call the main training function
-        train_model(
-            config=model_config,
-            data_path= paths_config.base_dir/paths_config.data_dir/paths_config.processed_data_file,
-            model_dir=paths_config.base_dir/paths_config.models_dir
-        )
+        train_model(model_config, paths_config)
 
-    except (FileNotFoundError, yaml.YAMLError, KeyError) as e:
-        logger.error(f"Error loading configuration files or data: {e}")
     except Exception as e:
-        logger.error(f"An unexpected error occurred during training: {e}")
+        logger.error(f"An error occurred in the main execution block: {e}", exc_info=True)
