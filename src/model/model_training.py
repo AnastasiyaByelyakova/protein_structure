@@ -1,3 +1,4 @@
+
 import os
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 import numpy as np
@@ -121,7 +122,6 @@ def train_model(model_config: ModelConfig, paths_config: PathsConfig):
     train_paths, val_paths = train_test_split(sample_paths, test_size=0.2, random_state=42)
 
     # Determine the actual feature dimension based on the config
-    # This logic must match the logic in feature_engineering.py
     use_pca = model_config.n_components is not None and model_config.n_components < BASE_FEATURE_DIM
     feature_dim = model_config.n_components if use_pca else BASE_FEATURE_DIM
 
@@ -132,33 +132,56 @@ def train_model(model_config: ModelConfig, paths_config: PathsConfig):
     }
 
     training_generator = DataGenerator(train_paths, shuffle=True, **params)
-    validation_generator = DataGenerator(val_paths, shuffle=False, **params)
+    
+    # Check if there are enough validation samples for at least one batch
+    if len(val_paths) >= model_config.batch_size:
+        validation_generator = DataGenerator(val_paths, shuffle=False, **params)
+        validation_steps = len(validation_generator)
+        logger.info(f"Using {len(val_paths)} samples for validation, split into {validation_steps} batches.")
+    else:
+        validation_generator = None
+        validation_steps = None
+        logger.warning(
+            f"Not enough validation samples ({len(val_paths)}) for a single batch of size {model_config.batch_size}. "
+            "Training will proceed without validation."
+        )
 
     model = build_model(model_config, feature_dim)
 
     callbacks = [
-        EarlyStopping(monitor='val_loss', patience=model_config.patience, verbose=1),
         ModelCheckpoint(
             filepath=str(paths_config.base_dir / paths_config.models_dir / f"{model_config.model_name}_{model_config.model_version}.h5"), 
             save_best_only=True, 
-            monitor='val_loss', 
+            monitor='val_loss' if validation_generator else 'loss', # Monitor training loss if no validation
             mode='min', 
             verbose=1
         ),
-        ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=5, min_lr=1e-6, verbose=1)
+        ReduceLROnPlateau(
+            monitor='val_loss' if validation_generator else 'loss', 
+            factor=0.5, 
+            patience=5, 
+            min_lr=1e-6, 
+            verbose=1
+        )
     ]
+
+    # Only add EarlyStopping if there is a validation set
+    if validation_generator:
+        callbacks.append(EarlyStopping(monitor='val_loss', patience=model_config.patience, verbose=1))
 
     history = model.fit(
         training_generator,
         validation_data=validation_generator,
         epochs=model_config.epochs,
-        callbacks=callbacks
+        callbacks=callbacks,
+        validation_steps=validation_steps # Explicitly set validation steps
     )
 
-    # Save training history plot
+    # Plotting logic based on history contents
     plt.figure(figsize=(12, 6))
     plt.plot(history.history['loss'], label='Training Loss')
-    plt.plot(history.history['val_loss'], label='Validation Loss')
+    if 'val_loss' in history.history:
+        plt.plot(history.history['val_loss'], label='Validation Loss')
     plt.title('Model Loss over Epochs')
     plt.xlabel('Epoch')
     plt.ylabel('Loss')
