@@ -1,6 +1,6 @@
 # Protein Structure Visualization and Analysis Web Application
 
-PLEASE KEEP IN MIND IT's STILL WORK IN PROGRESS!
+PLEASE KEEP IN MIND IT's STILL WORK IN PROGRESS! 
 
 This project is a web-based application designed for visualizing and analyzing protein structures. It allows users to fetch protein data from the NCBI database, process it, and visualize it in 3D. The application also includes a machine learning model for predicting protein properties.
 
